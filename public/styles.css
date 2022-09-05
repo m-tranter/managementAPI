@@ -1,0 +1,37 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+  background-color: wheat;
+}
+
+textarea {
+  font-family: sans-serif;
+  font-size: 1.5rem;
+  padding: 10px;
+  width: 400px;
+}
+
+#display {
+  font-family: sans-serif;
+  font-size: 1.5rem;
+  width: 400px;
+  height: 100px;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: lightpink;
+  border: 1px solid black;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+}
+
+#myBtn {
+  margin-left: 10px;
+}
