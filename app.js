@@ -42,6 +42,7 @@ async function send(entry, client) {
   try {
     result = await sendComment(entry, client);
   } catch (error) {
+    console.log(error);
     return false;
   }
     return true;
@@ -50,6 +51,7 @@ async function send(entry, client) {
 // Routes
 app.post('/comment/', (req, res) => {
   let msg = req.body.comment;
+  console.log(msg);
   const Client = require('contensis-management-api/lib/client').UniversalClient;
   const client = Client.create({
     clientType: "client_credentials",
