@@ -1,5 +1,5 @@
 /*
- * An app to interface witht the contensis management API. 
+ * An app to interface with the contensis management API. 
  */
 
 'use strict';
@@ -7,6 +7,7 @@
 // Modules
 const express = require('express');
 const path = require('path');
+const Client = require('contensis-management-api/lib/client').UniversalClient;
 const dotenv = require('dotenv');
 
 // Set some variables
@@ -42,7 +43,6 @@ async function send(entry, client) {
   try {
     result = await sendComment(entry, client);
   } catch (error) {
-    console.log(error);
     return false;
   }
     return true;
@@ -51,8 +51,7 @@ async function send(entry, client) {
 // Routes
 app.post('/comment/', (req, res) => {
   let msg = req.body.comment;
-  console.log(msg);
-  const Client = require('contensis-management-api/lib/client').UniversalClient;
+  let date = req.body.date;
   const client = Client.create({
     clientType: "client_credentials",
     clientDetails: {
@@ -63,7 +62,7 @@ app.post('/comment/', (req, res) => {
     rootUrl: process.env.ROOT_URL 
   });
 
-  let newEntry = { "myComment":  msg,
+  let newEntry = { "myComment":  msg, "dateAndTime": date,
     "sys": {
       "contentTypeId": "testComment",
       "projectId": "website",
