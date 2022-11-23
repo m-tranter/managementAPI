@@ -1,19 +1,20 @@
 /*
- * An app to interface with the contensis management API. 
+ * An app to interface with the contensis management API.
  */
 
-'use strict';
+"use strict";
 
 // Modules
-const express = require('express');
-const path = require('path');
-const Client = require('contensis-management-api/lib/client').UniversalClient;
-const dotenv = require('dotenv');
+const express = require("express");
+const path = require("path");
+const Client = require("contensis-management-api/lib/client").UniversalClient;
+const dotenv = require("dotenv");
+const cors = require("cors");
 
 // Set some variables
 dotenv.config();
 const port = process.env.PORT || 3005;
-const dir = path.join(__dirname, 'public');
+const dir = path.join(__dirname, "public");
 
 // Start the server.
 const app = express();
@@ -24,16 +25,18 @@ app.listen(port, () => {
 // Middleware
 app.use(express.static(dir));
 app.use(express.json());
+app.use(cors());
 
 // Function to sent the comment.
 function sendComment(entry, client) {
-  client.entries.create(entry)
-    .then(result => {      
-      console.log('API call result: ', result);              
+  client.entries
+    .create(entry)
+    .then((result) => {
+      console.log("API call result: ", result);
       return result;
     })
-    .catch(error => {
-      console.log('API call fetch error: ', error);      
+    .catch((error) => {
+      console.log("API call fetch error: ", error);
       return error;
     });
 }
@@ -45,30 +48,32 @@ async function send(entry, client) {
   } catch (error) {
     return false;
   }
-    return true;
+  return true;
 }
 
 // Routes
-app.post('/comment/', (req, res) => {
+app.post("/comment/", (req, res) => {
   let msg = req.body.comment;
   let date = req.body.date;
   const client = Client.create({
     clientType: "client_credentials",
     clientDetails: {
-      clientId: process.env.CLIENT_ID, 
-      clientSecret: process.env.CLIENT_SECRET 
+      clientId: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
     },
-    projectId: 'website',
-    rootUrl: process.env.ROOT_URL 
+    projectId: "website",
+    rootUrl: process.env.ROOT_URL,
   });
 
-  let newEntry = { "myComment":  msg, "dateAndTime": date,
-    "sys": {
-      "contentTypeId": "testComment",
-      "projectId": "website",
-      "language": "en-GB",
-      "dataFormat": "entry",
-    }
+  let newEntry = {
+    myComment: msg,
+    dateAndTime: date,
+    sys: {
+      contentTypeId: "testComment",
+      projectId: "website",
+      language: "en-GB",
+      dataFormat: "entry",
+    },
   };
 
   if (send(newEntry, client)) {
@@ -79,8 +84,6 @@ app.post('/comment/', (req, res) => {
 });
 
 // Anything else.
-app.all('*', function(req, res) {
-  res.status(404).send('Page not found.');
+app.all("*", function (req, res) {
+  res.status(404).send("Page not found.");
 });
-
-
