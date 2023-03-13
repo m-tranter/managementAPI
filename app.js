@@ -1,20 +1,20 @@
 /*
- * An app to interface with the contensis management API.
+  An app to interface with the Contensis Management & Delivery APIs.
  */
 
-"use strict";
+'use strict';
 
 // Modules
-const express = require("express");
-const path = require("path");
-const Client = require("contensis-management-api/lib/client").UniversalClient;
-const dotenv = require("dotenv");
-const cors = require("cors");
+const express = require('express');
+const path = require('path');
+const manClient =
+  require('contensis-management-api/lib/client').UniversalClient;
+const { Client } = require('contensis-delivery-api');
+const cors = require('cors');
 
 // Set some variables
-dotenv.config();
-const port = process.env.PORT || 3005;
-const dir = path.join(__dirname, "public");
+const port = 3001;
+const dir = path.join(__dirname, 'public');
 
 // Start the server.
 const app = express();
@@ -32,11 +32,11 @@ function sendComment(entry, client) {
   client.entries
     .create(entry)
     .then((result) => {
-      console.log("API call result: ", result);
+      console.log('API call result: ', result);
       return result;
     })
     .catch((error) => {
-      console.log("API call fetch error: ", error);
+      console.log('API call fetch error: ', error);
       return error;
     });
 }
@@ -52,16 +52,16 @@ async function send(entry, client) {
 }
 
 // Routes
-app.post("/comment/", (req, res) => {
+app.post('/comment/', (req, res) => {
   let msg = req.body.comment;
   let date = req.body.date;
-  const client = Client.create({
-    clientType: "client_credentials",
+  const client = manClient.create({
+    clientType: 'client_credentials',
     clientDetails: {
       clientId: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
     },
-    projectId: "website",
+    projectId: 'website',
     rootUrl: process.env.ROOT_URL,
   });
 
@@ -69,10 +69,10 @@ app.post("/comment/", (req, res) => {
     myComment: msg,
     dateAndTime: date,
     sys: {
-      contentTypeId: "testComment",
-      projectId: "website",
-      language: "en-GB",
-      dataFormat: "entry",
+      contentTypeId: 'testComment',
+      projectId: 'website',
+      language: 'en-GB',
+      dataFormat: 'entry',
     },
   };
 
@@ -83,7 +83,30 @@ app.post("/comment/", (req, res) => {
   }
 });
 
+app.get('/getComments/', (_, res) => {
+  let config = {
+    rootUrl: 'https://cms-chesheast.cloud.contensis.com/',
+    accessToken: 'QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I',
+    projectId: 'website',
+    language: 'en-GB',
+  };
+  let client = Client.create(config);
+  client.entries
+    .list({
+      contentTypeId: 'testComment',
+      versionStatus: 'latest',
+      pageOptions: { pageIndex: 0, pageSize: 500 },
+      orderBy: ['sys.id'],
+    })
+    .then((data) => {
+      console.log(
+        `Received a request for data: ${new Date().toLocaleString()}`
+      );
+      res.json(data);
+    });
+});
+
 // Anything else.
-app.all("*", function (req, res) {
-  res.status(404).send("Page not found.");
+app.all('*', function (req, res) {
+  res.status(404).send('Page not found.');
 });
