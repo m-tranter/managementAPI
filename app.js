@@ -32,11 +32,9 @@ function sendComment(entry, client) {
   client.entries
     .create(entry)
     .then((result) => {
-      console.log('API call result: ', result);
       return result;
     })
     .catch((error) => {
-      console.log('API call fetch error: ', error);
       return error;
     });
 }
