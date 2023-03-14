@@ -21,7 +21,7 @@ jobs:
     - name: Build the Docker image
       env:
         CLIENT_ID: ${{ secrets.CLIENT_ID }}
-        CLIENT_SECRET: ${{ secretes.CLIENT_SECRET }}
+        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         ROOT_URL: ${{ secrets.ROOT_URL }}
       run: docker build . --file Dockerfile --tag antiloquax/comment:latest
     - name: Docker push
@@ -38,7 +38,7 @@ jobs:
         alias: chesheast
         project-id: blockstest
         image-uri: "antiloquax/comment:latest "
-        client-id: ${{ secrets.CLIENT_ID }}
+        client-id: ${{ secrets.Z_CLIENT_ID }}
         shared-secret: ${{ secrets.SHARED_SECRET }}
         git-token: ${{ secrets.GIT_TOKEN }}
    
