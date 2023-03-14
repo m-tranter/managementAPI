@@ -39,6 +39,6 @@ jobs:
         project-id: blockstest
         image-uri: "antiloquax/comment:latest "
         client-id: ${{ secrets.Z_CLIENT_ID }}
-        shared-secret: ${{ secrets.SHARED_SECRET }}
+        shared-secret: ${{ secrets.Z_CLIENT_SECRET }}
         git-token: ${{ secrets.GIT_TOKEN }}
    
