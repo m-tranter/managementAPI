@@ -11,6 +11,7 @@ const manClient =
   require('contensis-management-api/lib/client').UniversalClient;
 const { Client } = require('contensis-delivery-api');
 const cors = require('cors');
+require('dotenv').config()
 
 // Set some variables
 const port = 3001;
@@ -44,8 +45,10 @@ async function send(entry, client) {
   try {
     result = await sendComment(entry, client);
   } catch (error) {
+    console.log(error);
     return false;
   }
+  console.log(`New comment received: ${new Date().toLocaleTimeString()}`);
   return true;
 }
 

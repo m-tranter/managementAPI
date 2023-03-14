@@ -1,26 +1,5 @@
 'use strict';
 
-function sendComment() {
-  let msg = myComment.value;
-  fetch('/comment', {
-    method: 'post',
-    body: JSON.stringify({ comment: msg }),
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-    },
-  })
-    .then((response) => {
-      if (response.status === 200) {
-        console.log('Success.');
-        myDisplay.innerText = `We received your comment:\n"${msg}"`;
-      } else {
-        myDisplay.innerText = 'Something went wrong.';
-        throw Error('Server rejected comment.');
-      }
-    })
-    .catch((err) => console.log(err));
-}
-
 const rx_iso_date = /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2})?(?:\.\d*)?Z?$/;
 const myComment = document.getElementById('comment');
 const divs = [
@@ -64,7 +43,7 @@ function loadEntries() {
   fetch(`/getComments`, { method: 'get' })
     .then((response) => {
       if (!response.ok) {
-        msg.innerHTML = 'Invalid URL.';
+        myDisplay.innerHTML = 'Invalid URL.';
         throw Error('Bad URL');
       }
       return response.json();
@@ -79,7 +58,7 @@ function loadEntries() {
       }
     })
     .finally(() => {
-      setTimeout(() => myDisplay.innerHTML="&nbsp;", 100);
+      setTimeout(() => (myDisplay.innerHTML = '&nbsp;'), 100);
     });
 }
 
@@ -178,7 +157,7 @@ function sendComment() {
   myBtn.disabled = true;
   myDisplay.innerText = 'Contacting the server.';
   let myDate = new Date().toLocaleString();
-  fetch('https://managementapi.onrender.com/comment', {
+  fetch('/comment', {
     method: 'post',
     body: JSON.stringify({ comment: msg, date: myDate }),
     headers: {
