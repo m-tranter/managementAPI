@@ -34,7 +34,7 @@ jobs:
     - name: Contensis block push action
       uses: contensis/block-push@v1
       with:
-        block-id: blockstest
+        block-id: comment
         alias: chesheast
         project-id: blockstest
         image-uri: "antiloquax/comment:latest "
