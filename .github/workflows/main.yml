@@ -1,0 +1,44 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Docker login
+      env:
+        USER: ${{ secrets.DOCKER_USER }}
+        PASS: ${{ secrets.DOCKER_PASS }}
+      run: |
+        docker login -u $USER -p $PASS
+    
+    - name: Build the Docker image
+      env:
+        CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        CLIENT_SECRET: ${{ secretes.CLIENT_SECRET }}
+        ROOT_URL: ${{ secrets.ROOT_URL }}
+      run: docker build . --file Dockerfile --tag antiloquax/comment:latest
+    - name: Docker push
+      run: docker push antiloquax/comment:latest
+      
+  job2:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Contensis block push action
+      uses: contensis/block-push@v1
+      with:
+        block-id: blockstest
+        alias: chesheast
+        project-id: blockstest
+        image-uri: "antiloquax/comment:latest "
+        client-id: ${{ secrets.CLIENT_ID }}
+        shared-secret: ${{ secrets.SHARED_SECRET }}
+        git-token: ${{ secrets.GIT_TOKEN }}
+   
