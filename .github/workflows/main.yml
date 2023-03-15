@@ -8,19 +8,19 @@ on:
   workflow_call:
     inputs:
       block-id:
-        default: comment
+        default: "comment"
         type: string
       auto-release:
         default: false
         type: boolean
       image-uri:
-        default: antiloquax/comment:latest
+        default: "antiloquax/comment:latest"
         type: string
       alias:
-        default: chesheast
+        default: "chesheast"
         type: string
       project-id:
-        default: blockstest
+        default: "blockstest"
         type: string
       tag-repo:
         default: false
