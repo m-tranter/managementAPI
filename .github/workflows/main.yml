@@ -34,9 +34,9 @@ jobs:
     - name: Contensis block push action
       uses: contensis/block-push@v1
       with:
-        block-id: comment
         alias: chesheast
         project-id: blockstest
+        block-id: comment
         image-uri: "antiloquax/comment:latest "
         client-id: ${{ secrets.Z_CLIENT_ID }}
         shared-secret: ${{ secrets.Z_SHARED_SECRET }}
