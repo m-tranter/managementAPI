@@ -64,7 +64,6 @@ app.post('/comment/', (req, res) => {
     projectId: 'website',
     rootUrl: process.env.ROOT_URL,
   });
-
   let newEntry = {
     myComment: msg,
     dateAndTime: date,
