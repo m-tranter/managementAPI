@@ -9,7 +9,7 @@ const manClient =
   require('contensis-management-api/lib/client').UniversalClient;
 const { Client } = require('contensis-delivery-api');
 const cors = require('cors');
-require('dotenv').config()
+//require('dotenv').config()
 
 // Set some variables
 const port = 3001;
