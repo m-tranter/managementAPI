@@ -5,7 +5,6 @@
 
 console.log(process.env.CLIENT_ID);
 
-
 // Modules
 const express = require('express');
 const path = require('path');
