@@ -54,7 +54,7 @@ async function send(entry, client) {
 // Routes
 app.post('/comment/', (req, res) => {
   let msg = req.body.comment;
-  console.log(`New comment received: ${msg}\n${new Date().toLocaleString()}`;
+  console.log(`New comment received: ${msg}\n${new Date().toLocaleString()}`);
   let date = req.body.date;
   const client = manClient.create({
     clientType: 'client_credentials',
