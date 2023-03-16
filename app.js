@@ -11,7 +11,7 @@ const { Client } = require('contensis-delivery-api');
 const cors = require('cors');
 //require('dotenv').config()
 
-// Set some variables
+// Set some variables.
 const port = 3001;
 const dir = path.join(__dirname, 'public');
 
