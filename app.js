@@ -2,6 +2,7 @@
 
 'use strict';
 console.log(process.env.CLIENT_ID);
+console.log(orocess.env);
 
 // Modules
 const express = require('express');
