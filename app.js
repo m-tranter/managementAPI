@@ -5,7 +5,6 @@
 // Having problems with ENV
 console.log(`Client ID: ${CLIENT_ID}`);
 
-
 // Modules
 const express = require('express');
 const path = require('path');
