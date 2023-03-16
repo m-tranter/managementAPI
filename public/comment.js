@@ -165,6 +165,7 @@ function sendComment() {
     },
   })
     .then((response) => {
+    console.log(response);
       if (response.status === 200) {
         myDisplay.innerText = `We received your comment:\n"${msg}"`;
         setTimeout(() => {
