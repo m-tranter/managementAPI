@@ -1,6 +1,7 @@
 // An app to interface with the Contensis Management & Delivery APIs.
 
 'use strict';
+// Having oroblems with ENV
 console.log(`Client ID: ${process.env.CLIENT_ID}`);
 console.log(`Process.env: ${orocess.env}}`);
 
