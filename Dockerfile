@@ -2,12 +2,10 @@ FROM node:18-alpine
 COPY . .
 WORKDIR /
 EXPOSE 3001
-ARG CLIENT_ID
-ARG CLIENT_SECRET
+
 ARG ROOT_URL
-ENV CLIENT_ID=${CLIENT_ID}
-ENV CLIENT_SECRET=${CLIENT_SECRET}
+
 ENV ROOT_URL=${ROOT_URL}
-RUN echo Root url: $ROOT_URL
+
 RUN yarn install --production
 CMD ["node", "app.js"]
