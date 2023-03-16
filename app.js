@@ -3,8 +3,8 @@
 'use strict';
 
 // Having problems with ENV
-console.log(`Client ID: ${process.env.CLIENT_ID}`);
-console.log(`Process.env: ${orocess.env}}`);
+console.log(`Client ID: ${CLIENT_ID}`);
+
 
 // Modules
 const express = require('express');
