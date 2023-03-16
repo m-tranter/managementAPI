@@ -1,7 +1,6 @@
 // An app to interface with the Contensis Management & Delivery APIs.
 'use strict';
 
-
 console.log(`Client ID: ${CLIENT_ID}`);
 
 // Modules
