@@ -43,6 +43,7 @@ async function send(entry, client) {
   let result;
   try {
     result = await sendComment(entry, client);
+    console.log(result);
   } catch (error) {
     console.log(error);
     return false;
