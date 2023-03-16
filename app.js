@@ -1,7 +1,7 @@
 // An app to interface with the Contensis Management & Delivery APIs.
 'use strict';
 
-console.log(`ENV: ${process.env}`);
+//console.log(`ENV: ${process.env}`);
 
 // Modules
 const express = require('express');
