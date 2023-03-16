@@ -1,8 +1,6 @@
-/*
-  An app to interface with the Contensis Management & Delivery APIs.
- */
-'use strict';
+// An app to interface with the Contensis Management & Delivery APIs.
 
+'use strict';
 console.log(process.env.CLIENT_ID);
 
 // Modules
