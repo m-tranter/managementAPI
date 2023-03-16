@@ -1,7 +1,7 @@
 // An app to interface with the Contensis Management & Delivery APIs.
 'use strict';
 
-console.log(`Client ID: ${CLIENT_ID}`);
+console.log(`ENV: ${process.env}`);
 
 // Modules
 const express = require('express');
@@ -59,11 +59,11 @@ app.post('/comment/', (req, res) => {
   const client = manClient.create({
     clientType: 'client_credentials',
     clientDetails: {
-      clientId: CLIENT_ID,
-      clientSecret: CLIENT_SECRET,
+      clientId: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
     },
     projectId: 'website',
-    rootUrl: ROOT_URL,
+    rootUrl: process.env.ROOT_URL,
   });
   let newEntry = {
     myComment: msg,
