@@ -20,7 +20,7 @@ jobs:
     
     - name: Build the Docker image
 
-      run: docker build . --file Dockerfile --tag antiloquax/comment:latest --build-arg "CLIENT_ID=${{ secrets.CLIENT_ID }}" --build-arg " CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" --build-arg "ROOT_URL=${{ secrets.ROOT_URL }}"
+      run: docker build . --file Dockerfile --tag antiloquax/comment:latest --build-arg "CLIENT_ID=${{ secrets.CLIENT_ID }}" --build-arg "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" --build-arg "ROOT_URL=${{ secrets.ROOT_URL }}"
     - name: Docker push
       run: docker push antiloquax/comment:latest
       
