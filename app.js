@@ -49,6 +49,7 @@ async function send(entry, client) {
   return true;
 }
 
+
 // Routes
 app.post('/comment/', (req, res) => {
   let msg = req.body.comment;
