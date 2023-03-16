@@ -3,7 +3,7 @@
  */
 'use strict';
 
-console.log(CLIENT_ID);
+console.log(process.env.CLIENT_ID);
 
 
 // Modules
