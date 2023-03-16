@@ -2,7 +2,7 @@
 
 'use strict';
 
-// Having oroblems with ENV
+// Having problems with ENV
 console.log(`Client ID: ${process.env.CLIENT_ID}`);
 console.log(`Process.env: ${orocess.env}}`);
 
