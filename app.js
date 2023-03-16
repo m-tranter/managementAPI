@@ -59,11 +59,11 @@ app.post('/comment/', (req, res) => {
   const client = manClient.create({
     clientType: 'client_credentials',
     clientDetails: {
-      clientId: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET,
+      clientId: CLIENT_ID,
+      clientSecret: CLIENT_SECRET,
     },
     projectId: 'website',
-    rootUrl: process.env.ROOT_URL,
+    rootUrl: ROOT_URL,
   });
   let newEntry = {
     myComment: msg,
