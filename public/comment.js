@@ -179,3 +179,4 @@ function sendComment() {
     .catch((err) => console.log(err));
   myBtn.disabled = false;
 }
+
