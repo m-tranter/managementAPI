@@ -34,7 +34,7 @@ jobs:
         block-id: comment
         alias: chesheast
         project-id: blockstest
-        image-uri: "antiloquax/comment:latest "
+        image-uri: "antiloquax/comment2:latest "
         client-id: ${{ secrets.Z_CLIENT_ID }}
         shared-secret: ${{ secrets.Z_SHARED_SECRET }}
         git-token: ${{ secrets.GIT_TOKEN }}
