@@ -35,7 +35,6 @@ var k = 1;
 var j = 1;
 var item;
 var items = [];
-
 loadEntries();
 toggleDivs();
 
