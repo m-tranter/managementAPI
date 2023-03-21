@@ -27,7 +27,6 @@ app.use(express.static(dir));
 app.use(express.json());
 app.use(cors());
 
-
 // Function to sent the comment.
 function sendComment(entry, client) {
   client.entries
