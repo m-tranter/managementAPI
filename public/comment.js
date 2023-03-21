@@ -31,12 +31,10 @@ commentField.addEventListener(
   'mouseout',
   () => (commentField.style.backgroundColor = 'White')
 );
-
 var k = 1;
 var j = 1;
 var item;
 var items = [];
-
 loadEntries();
 toggleDivs();
 
@@ -51,7 +49,7 @@ function loadEntries() {
     })
     .then((res) => {
       items = createDates(res.items.slice()).sort(
-        sortObjDate('dateAndTime', 1)
+        sortObjDate('date', 1)
       );
       clearTable();
       for (item of items) {
@@ -87,8 +85,8 @@ function addRow(item) {
   let row = myTable.insertRow(1);
   let date = row.insertCell(0);
   let comment = row.insertCell(1);
-  date.innerHTML = item.dateAndTime.toLocaleDateString();
-  comment.innerHTML = item.myComment;
+  date.innerHTML = item.date.toLocaleDateString();
+  comment.innerHTML = item.comment;
 }
 
 function clear() {
@@ -132,7 +130,7 @@ function createDates(arr) {
 
 function refresh(msg) {
   loadEntries();
-  if (!items.some((e) => e.myComment === msg)) {
+  if (!items.some((e) => e.comment === msg)) {
     setTimeout(() => refresh(msg), 1000);
   } else {
     toggleDivs();
@@ -166,7 +164,6 @@ function sendComment() {
     },
   })
     .then((response) => {
-    console.log(response);
       if (response.status === 200) {
         myDisplay.innerText = `We received your comment:\n"${msg}"`;
         setTimeout(() => {

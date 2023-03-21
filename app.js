@@ -1,8 +1,6 @@
 // An app to interface with the Contensis Management & Delivery APIs.
 'use strict';
 
-Object.keys(process.env).forEach(k => console.log(`${k}: ${process.env[k]}`));
-
 // Modules
 const express = require('express');
 const path = require('path');
@@ -10,7 +8,7 @@ const manClient =
   require('contensis-management-api/lib/client').UniversalClient;
 const { Client } = require('contensis-delivery-api');
 const cors = require('cors');
-//require('dotenv').config()
+//require('dotenv').config();
 
 // Set some variables.
 const port = 3001;
@@ -26,6 +24,7 @@ app.listen(port, () => {
 app.use(express.static(dir));
 app.use(express.json());
 app.use(cors());
+
 
 // Function to sent the comment.
 function sendComment(entry, client) {
@@ -50,7 +49,6 @@ async function send(entry, client) {
   return true;
 }
 
-
 // Routes
 app.post('/comment/', (req, res) => {
   let msg = req.body.comment;
@@ -59,18 +57,18 @@ app.post('/comment/', (req, res) => {
   const client = manClient.create({
     clientType: 'client_credentials',
     clientDetails: {
-      clientId: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET,
+      clientId: process.env.clientId,
+      clientSecret: process.env.sharedSecret,
     },
-    projectId: 'website',
+    projectId: 'blockstest',
     rootUrl: process.env.ROOT_URL,
   });
   let newEntry = {
-    myComment: msg,
-    dateAndTime: date,
+    comment: msg,
+    date: date,
     sys: {
-      contentTypeId: 'testComment',
-      projectId: 'website',
+      contentTypeId: 'comment',
+      projectId: 'blockstest',
       language: 'en-GB',
       dataFormat: 'entry',
     },
@@ -86,14 +84,14 @@ app.post('/comment/', (req, res) => {
 app.get('/getComments/', (_, res) => {
   let config = {
     rootUrl: 'https://cms-chesheast.cloud.contensis.com/',
-    accessToken: 'QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I',
-    projectId: 'website',
+    accessToken: process.env.accessToken,
+    projectId: 'blockstest',
     language: 'en-GB',
   };
   let client = Client.create(config);
   client.entries
     .list({
-      contentTypeId: 'testComment',
+      contentTypeId: 'comment',
       versionStatus: 'latest',
       pageOptions: { pageIndex: 0, pageSize: 500 },
       orderBy: ['sys.id'],
@@ -110,5 +108,3 @@ app.get('/getComments/', (_, res) => {
 app.all('*', function (req, res) {
   res.status(404).send('Page not found.');
 });
-
-
