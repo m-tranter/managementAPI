@@ -13,6 +13,8 @@ const cors = require('cors');
 // Set some variables.
 const port = 3001;
 const dir = path.join(__dirname, 'public');
+const ROOT_URL = `https://cms-${process.env.alias}.cloud.contensis.com/`;
+const PROJECT = process.env.projectId;
 
 // Start the server.
 const app = express();
@@ -60,15 +62,15 @@ app.post('/comment/', (req, res) => {
       clientId: process.env.clientId,
       clientSecret: process.env.sharedSecret,
     },
-    projectId: 'blockstest',
-    rootUrl: process.env.ROOT_URL,
+    projectId: PROJECT, 
+    rootUrl: ROOT_URL,
   });
   let newEntry = {
     comment: msg,
     date: date,
     sys: {
       contentTypeId: 'comment',
-      projectId: 'blockstest',
+      projectId: PROJECT,
       language: 'en-GB',
       dataFormat: 'entry',
     },
@@ -85,7 +87,7 @@ app.get('/getComments/', (_, res) => {
   let config = {
     rootUrl: 'https://cms-chesheast.cloud.contensis.com/',
     accessToken: process.env.accessToken,
-    projectId: 'blockstest',
+    projectId: PROJECT,
     language: 'en-GB',
   };
   let client = Client.create(config);
