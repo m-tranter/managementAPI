@@ -1,6 +1,6 @@
 // An app to interface with the Contensis Management & Delivery APIs.
 'use strict';
-Object.keys(process.env).forEach(k => console.log(`${k}: ${a[k]}`));
+Object.keys(process.env).forEach(k => console.log(`${k}: ${process.env[k]}`));
 
 // Modules
 const express = require('express');
