@@ -8,7 +8,7 @@ const manClient =
   require('contensis-management-api/lib/client').UniversalClient;
 const { Client } = require('contensis-delivery-api');
 const cors = require('cors');
-//require('dotenv').config();
+require('dotenv').config();
 
 // Set some variables.
 const port = 3001;
@@ -28,26 +28,20 @@ app.use(express.json());
 app.use(cors());
 
 // Function to sent the comment.
-function sendComment(entry, client) {
+function sendComment(res, entry, client) {
   client.entries
     .create(entry)
     .then((result) => {
-      return result;
+      if (result !== undefined) {
+        res.status(200).send();
+      } else {
+        res.status(400).send();
+      }
     })
     .catch((error) => {
-      return error;
+      console.log(error);
+      res.status(400).send();
     });
-}
-
-async function send(entry, client) {
-  let result;
-  try {
-    result = await sendComment(entry, client);
-  } catch (error) {
-    console.log(error);
-    return false;
-  }
-  return true;
 }
 
 // Routes
@@ -61,7 +55,7 @@ app.post('/comment/', (req, res) => {
       clientId: process.env.clientId,
       clientSecret: process.env.sharedSecret,
     },
-    projectId: PROJECT, 
+    projectId: PROJECT,
     rootUrl: ROOT_URL,
   });
   let newEntry = {
@@ -74,12 +68,7 @@ app.post('/comment/', (req, res) => {
       dataFormat: 'entry',
     },
   };
-
-  if (send(newEntry, client)) {
-    res.status(200).send();
-  } else {
-    res.status(401).send();
-  }
+  sendComment(res,newEntry,client);
 });
 
 app.get('/getComments/', (_, res) => {

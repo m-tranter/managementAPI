@@ -172,7 +172,6 @@ function sendComment() {
         }, 2000);
       } else {
         myDisplay.innerText = 'Something went wrong.';
-        throw Error('Server rejected comment.');
       }
     })
     .catch((err) => console.log(err));
