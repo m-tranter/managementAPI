@@ -2,6 +2,8 @@
   box-sizing: border-box;
 }
 
+
+
 html {
   height: 100%;
   width: 100%;
@@ -21,15 +23,5 @@ textarea {
   height: 100px;
 }
 
-#myBtn {
-  background: var(--cecGreen);
-  color: White;
-  border: 1px solid rgb(0, 0, 0, 0);
-}
 
-#myBtn:hover {
-  background: var(--cecLG);
-  color: Black;
-  border: 1px solid Black;
-}
 
