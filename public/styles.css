@@ -17,6 +17,18 @@ textarea {
 #display {
   font-family: sans-serif;
   font-size: 1rem;
-  width: 400px;
+  width: 600px;
   height: 100px;
+}
+
+#myBtn {
+  background: var(--cecGreen);
+  color: White;
+  border: 1px solid rgb(0, 0, 0, 0);
+}
+
+#myBtn:hover {
+  background: var(--cecLG);
+  color: Black;
+  border: 1px solid Black;
 }
