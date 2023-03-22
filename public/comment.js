@@ -1,5 +1,9 @@
 'use strict';
 
+let k = 1;
+let j = 1;
+let item;
+let items = [];
 const rx_iso_date = /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2})?(?:\.\d*)?Z?$/;
 const myComment = document.getElementById('comment');
 const divs = [
@@ -11,9 +15,10 @@ const myBtn = document.getElementById('myBtn');
 const myTable = document.getElementById('myTable');
 const dateField = document.getElementById('dateField');
 const commentField = document.getElementById('commentField');
+
 myBtn.addEventListener('click', sendComment);
 myComment.addEventListener('focus', clear);
-dateField.addEventListener('click', () => sortByField('dateAndTime'));
+dateField.addEventListener('click', () => sortByField('date'));
 dateField.addEventListener(
   'mouseover',
   () => (dateField.style.backgroundColor = 'LightGreen')
@@ -22,7 +27,7 @@ dateField.addEventListener(
   'mouseout',
   () => (dateField.style.backgroundColor = 'White')
 );
-commentField.addEventListener('click', () => sortByField('myComment'));
+commentField.addEventListener('click', () => sortByField('comment'));
 commentField.addEventListener(
   'mouseover',
   () => (commentField.style.backgroundColor = 'LightGreen')
@@ -31,14 +36,8 @@ commentField.addEventListener(
   'mouseout',
   () => (commentField.style.backgroundColor = 'White')
 );
-var k = 1;
-var j = 1;
-var item;
-var items = [];
-loadEntries();
-toggleDivs();
 
-function loadEntries() {
+(function loadEntries() {
   fetch(`/getComments`, { method: 'get' })
     .then((response) => {
       if (!response.ok) {
@@ -55,12 +54,13 @@ function loadEntries() {
       }
     })
     .finally(() => {
+      toggleDivs();
       setTimeout(() => (myDisplay.innerHTML = '&nbsp;'), 100);
     });
-}
+})();
 
 function sortByField(f) {
-  if (f === 'myComment') {
+  if (f === 'comment') {
     items.sort(sortObjStr(f, -1));
   } else {
     items.sort(sortObjDate(f, -1));
@@ -72,11 +72,11 @@ function sortByField(f) {
 }
 
 function clearTable() {
-  for (let i = 0; i < items.length; i++) {
+  items.forEach(() => {
     try {
       myTable.deleteRow(1);
-    } catch (ignore) {}
-  }
+    } catch (_) {}
+  });
 }
 
 function addRow(item) {

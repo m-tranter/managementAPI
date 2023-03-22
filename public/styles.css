@@ -12,14 +12,12 @@ html {
 textarea {
   font-family: sans-serif;
   font-size: 1.5rem;
-  width: 600px;
   display: block;
 }
 
 #display {
   font-family: sans-serif;
   font-size: 1rem;
-  width: 600px;
   height: 100px;
 }
 

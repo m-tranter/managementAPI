@@ -99,6 +99,6 @@ app.get('/getComments/', (_, res) => {
 });
 
 // Anything else.
-app.all('*', function (req, res) {
+app.all('*', function (_, res) {
   res.status(404).send('Page not found.');
 });
