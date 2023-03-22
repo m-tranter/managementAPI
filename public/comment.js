@@ -48,9 +48,7 @@ function loadEntries() {
       return response.json();
     })
     .then((res) => {
-      items = createDates(res.items.slice()).sort(
-        sortObjDate('date', 1)
-      );
+      items = createDates(res.items.slice()).sort(sortObjDate('date', 1));
       clearTable();
       for (item of items) {
         addRow(item);
@@ -170,6 +168,9 @@ function sendComment() {
           toggleDivs();
           refresh(msg);
         }, 2000);
+      } else if (response.status === 401) {
+        myDisplay.innerText =
+          'We cannot accept comments that contain profanity.';
       } else {
         myDisplay.innerText = 'Something went wrong.';
       }
@@ -177,4 +178,3 @@ function sendComment() {
     .catch((err) => console.log(err));
   myBtn.disabled = false;
 }
-

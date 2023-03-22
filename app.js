@@ -8,8 +8,9 @@ const manClient =
   require('contensis-management-api/lib/client').UniversalClient;
 const { Client } = require('contensis-delivery-api');
 const cors = require('cors');
+const {regEx} = require("./swears.js");
 require('dotenv').config();
-
+//
 // Set some variables.
 const port = 3001;
 const dir = path.join(__dirname, 'public');
@@ -39,7 +40,6 @@ function sendComment(res, entry, client) {
       }
     })
     .catch((error) => {
-      console.log(error);
       res.status(400).send();
     });
 }
@@ -47,6 +47,10 @@ function sendComment(res, entry, client) {
 // Routes
 app.post('/comment/', (req, res) => {
   let msg = req.body.comment;
+  if (regEx.test(msg)) {
+    res.status(401).send();
+    return;
+  }
   console.log(`New comment received: ${msg}\n${new Date().toLocaleString()}`);
   let date = req.body.date;
   const client = manClient.create({
