@@ -1,6 +1,4 @@
-const swears = ['fuck', 'cunt', 'wank', 'piss', 'bitch', 'ass', 'bastard', 'mark', 'testswear'].join('|');
-const bound = "(\s+)|([\p{P}\p{S}])";
-const regEx =  new RegExp(`/${bound}|${swears}|${bound}/i`);
-
+const swears = ['fuck', 'cunt', 'wank', 'piss', 'bitch', 'ass', 'bastard', 'testswear'].join('|');
+const regEx =  new RegExp(`\\b${swears}\\b`, 'i');
 
 module.exports = { regEx };
