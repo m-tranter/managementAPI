@@ -1,2 +1,2 @@
-A demo app that uses the Contesis Delivery and Management APIS.
+A demo app that uses the Contesis Delivery and Management APIs.
 

@@ -1,7 +1,5 @@
 'use strict';
 
-let k = 1;
-let j = 1;
 let item;
 let items = [];
 const rx_iso_date = /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2})?(?:\.\d*)?Z?$/;
@@ -37,45 +35,47 @@ commentField.addEventListener(
   () => (commentField.style.backgroundColor = 'White')
 );
 
+const refresh = (data) => {
+  items = data.items 
+  ? createDates(data.items.slice()).sort(sortNum('date'))
+  : [];
+  redrawTable();
+  if (myDisplay.innerHTML.startsWith("Contacting")) {
+    myDisplay.innerHTML = '&nbsp';
+  }
+};
+
 (function loadEntries() {
+  myDisplay.innerText = 'Contacting the server.';
   fetch(`/getComments`, { method: 'get' })
     .then((response) => {
       if (!response.ok) {
-        myDisplay.innerHTML = 'Invalid URL.';
-        throw Error('Bad URL');
+        myDisplay.innerHTML = 'Something went wrong..';
       }
       return response.json();
     })
     .then((res) => {
-      items = createDates(res.items.slice()).sort(sortObjDate('date', 1));
-      clearTable();
-      for (item of items) {
-        addRow(item);
-      }
+      refresh(res);
     })
-    .finally(() => {
-      toggleDivs();
-      setTimeout(() => (myDisplay.innerHTML = '&nbsp;'), 100);
-    });
 })();
 
 function sortByField(f) {
-  if (f === 'comment') {
-    items.sort(sortObjStr(f, -1));
-  } else {
-    items.sort(sortObjDate(f, -1));
-  }
-  clearTable();
-  for (item of items) {
-    addRow(item);
-  }
+  let temp = [...items];
+  temp.sort(f === 'comment' ? sortStr(f) : sortNum(f));
+  items = temp.some((e, i) => e.index !== items[i].index)
+    ? (items = [...temp])
+    : (items = [...temp].reverse());
+  redrawTable();
 }
 
-function clearTable() {
+function redrawTable() {
   items.forEach(() => {
     try {
       myTable.deleteRow(1);
     } catch (_) {}
+  });
+  items.forEach((item) => {
+    addRow(item);
   });
 }
 
@@ -91,30 +91,30 @@ function clear() {
   myDisplay.innerHTML = '&nbsp;';
 }
 
-function sortObjStr(field, op) {
-  k *= op;
+function sortStr(field) {
   return (a, b) => {
     let x = a[field].toLowerCase();
     let y = b[field].toLowerCase();
     if (x < y) {
-      return -1 * k;
+      return -1;
     }
     if (x > y) {
-      return 1 * k;
+      return 1;
     }
     return 0;
   };
 }
 
-function sortObjDate(field, op) {
-  j *= op;
+function sortNum(field) {
   return (a, b) => {
-    return (a[field] - b[field]) * j;
+    return a[field] - b[field];
   };
 }
 
+// Makes date into date objects and adds an index.
 function createDates(arr) {
-  return arr.map((e) => {
+  return arr.map((e, i) => {
+    e.index = i;
     return Object.fromEntries(
       Object.entries(e).map(([k, v]) =>
         k.toLowerCase().includes('date') ||
@@ -123,25 +123,6 @@ function createDates(arr) {
           : [k, v]
       )
     );
-  });
-}
-
-function refresh(msg) {
-  loadEntries();
-  if (!items.some((e) => e.comment === msg)) {
-    setTimeout(() => refresh(msg), 1000);
-  } else {
-    toggleDivs();
-  }
-}
-
-function toggleDivs() {
-  divs.forEach((e) => {
-    if (e.classList.contains('d-none')) {
-      e.classList.remove('d-none');
-    } else {
-      e.classList.add('d-none');
-    }
   });
 }
 
@@ -162,18 +143,19 @@ function sendComment() {
     },
   })
     .then((response) => {
-      if (response.status === 200) {
+      if (response.ok) {
         myDisplay.innerText = `We received your comment:\n"${msg}"`;
-        setTimeout(() => {
-          toggleDivs();
-          refresh(msg);
-        }, 2000);
+        setTimeout(() => myDisplay.innerHTML = '&nbsp;', 1000);
       } else if (response.status === 401) {
         myDisplay.innerText =
           'We cannot accept comments that contain profanity.';
       } else {
         myDisplay.innerText = 'Something went wrong.';
       }
+        return response.json();
+    })
+    .then((res) => {
+      refresh(res);
     })
     .catch((err) => console.log(err));
   myBtn.disabled = false;

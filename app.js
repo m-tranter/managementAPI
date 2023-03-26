@@ -1,7 +1,7 @@
 // An app to interface with the Contensis Management & Delivery APIs.
 'use strict';
 
-// Modules
+// Modules.
 const express = require('express');
 const path = require('path');
 const manClient =
@@ -9,7 +9,7 @@ const manClient =
 const { Client } = require('contensis-delivery-api');
 const cors = require('cors');
 const {regEx} = require("./swears.js");
-//require('dotenv').config();
+require('dotenv').config();
 
 
 // Set some variables.
@@ -17,6 +17,22 @@ const port = 3001;
 const dir = path.join(__dirname, 'public');
 const ROOT_URL = `https://cms-${process.env.alias}.cloud.contensis.com/`;
 const PROJECT = process.env.projectId;
+const config = {
+    rootUrl: ROOT_URL, 
+    accessToken: process.env.accessToken,
+    projectId: PROJECT,
+    language: 'en-GB',
+  };
+const client = Client.create(config);
+const managementClient = manClient.create({
+    clientType: 'client_credentials',
+    clientDetails: {
+      clientId: process.env.clientId,
+      clientSecret: process.env.sharedSecret,
+    },
+    projectId: PROJECT,
+    rootUrl: ROOT_URL,
+  });
 
 // Start the server.
 const app = express();
@@ -34,35 +50,41 @@ function sendComment(res, entry, client) {
   client.entries
     .create(entry)
     .then((result) => {
-      if (result !== undefined) {
-        res.status(200).send();
+      if (result) {
+        sendEntries(res, 200);
       } else {
         res.status(400).send();
       }
     })
-    .catch((error) => {
+    .catch((err) => {
+      console.log(err);
       res.status(400).send();
+    });
+}
+
+const sendEntries = (res, status) => {
+  client.entries
+    .list({
+      contentTypeId: 'comment',
+      versionStatus: 'latest',
+      pageOptions: { pageIndex: 0, pageSize: 500 },
+      orderBy: ['sys.id'],
+    })
+    .then((data) => {
+      res.status(status).json(data);
     });
 }
 
 // Routes
 app.post('/comment/', (req, res) => {
   let msg = req.body.comment;
+  console.log(`New comment received: ${msg}\n${new Date().toLocaleString()}`);
   if (regEx.test(msg)) {
-    res.status(401).send();
+    console.log("Profanity detected.");
+    sendEntries(res, 401);
     return;
   }
-  console.log(`New comment received: ${msg}\n${new Date().toLocaleString()}`);
   let date = req.body.date;
-  const client = manClient.create({
-    clientType: 'client_credentials',
-    clientDetails: {
-      clientId: process.env.clientId,
-      clientSecret: process.env.sharedSecret,
-    },
-    projectId: PROJECT,
-    rootUrl: ROOT_URL,
-  });
   let newEntry = {
     comment: msg,
     date: date,
@@ -73,30 +95,14 @@ app.post('/comment/', (req, res) => {
       dataFormat: 'entry',
     },
   };
-  sendComment(res,newEntry,client);
+  sendComment(res,newEntry,managementClient);
 });
 
 app.get('/getComments/', (_, res) => {
-  let config = {
-    rootUrl: 'https://cms-chesheast.cloud.contensis.com/',
-    accessToken: process.env.accessToken,
-    projectId: PROJECT,
-    language: 'en-GB',
-  };
-  let client = Client.create(config);
-  client.entries
-    .list({
-      contentTypeId: 'comment',
-      versionStatus: 'latest',
-      pageOptions: { pageIndex: 0, pageSize: 500 },
-      orderBy: ['sys.id'],
-    })
-    .then((data) => {
       console.log(
         `Received a request for data: ${new Date().toLocaleString()}`
       );
-      res.json(data);
-    });
+  sendEntries(res, 200);
 });
 
 // Anything else.
