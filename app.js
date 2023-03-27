@@ -103,7 +103,7 @@ app.get('/getComments/', (_, res) => {
 });
 
 
-app.all('/comments*', function (_, res) {
+app.get('/comments/(.*?)', function (_, res) {
   res.sendFile(path.join(dir, '/index.html'));
 });
 
