@@ -9,7 +9,7 @@ const manClient =
 const { Client } = require('contensis-delivery-api');
 const cors = require('cors');
 const { regEx } = require('./swears.js');
-require('dotenv').config();
+//require('dotenv').config();
 
 // Set some variables.
 const port = 3001;
@@ -102,7 +102,7 @@ app.get('/getComments/', (_, res) => {
   sendEntries(res, 200);
 });
 
-// Anything in the blocks path.
+// Anything in the comment path.
 app.all('/comments*', function (_, res) {
   res.sendFile(path.join(dir, '/index.html'));
 });
