@@ -107,5 +107,5 @@ app.get('/getComments/', (_, res) => {
 
 // Anything else.
 app.all('*', function (_, res) {
-  res.sendFile(path.join(__dirname, '/index.html'));
+  res.sendFile(path.join(dir, '/index.html'));
 });
