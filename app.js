@@ -102,7 +102,7 @@ app.get('/getComments/', (_, res) => {
   sendEntries(res, 200);
 });
 
-// Anything in the comment path.
+// Anything in the blocks path.
 app.all('/comments*', function (_, res) {
   res.sendFile(path.join(dir, '/index.html'));
 });
