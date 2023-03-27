@@ -105,7 +105,11 @@ app.get('/getComments/', (_, res) => {
   sendEntries(res, 200);
 });
 
-// Anything else.
-app.all('*', function (_, res) {
+// Anything in the blocks path.
+app.all('/blocks*', function (_, res) {
   res.sendFile(path.join(dir, '/index.html'));
+});
+
+app.all('*', function (_,res) {
+  res.status(404).send('Page not found.');
 });
