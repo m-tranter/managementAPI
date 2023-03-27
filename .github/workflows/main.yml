@@ -17,9 +17,7 @@ jobs:
         PASS: ${{ secrets.DOCKER_PASS }}
       run: |
         docker login -u $USER -p $PASS
-    
     - name: Build the Docker image
-
       run: docker build . --file Dockerfile --tag antiloquax/comment2:latest
     - name: Docker push
       run: docker push antiloquax/comment2:latest
