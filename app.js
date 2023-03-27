@@ -106,6 +106,6 @@ app.get('/getComments/', (_, res) => {
 });
 
 // Anything else.
-app.all('/comments', function (_, res) {
+app.all('*', function (_, res) {
   res.sendFile(path.join(__dirname, '/index.html'));
 });
