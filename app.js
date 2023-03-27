@@ -8,9 +8,8 @@ const manClient =
   require('contensis-management-api/lib/client').UniversalClient;
 const { Client } = require('contensis-delivery-api');
 const cors = require('cors');
-const {regEx} = require("./swears.js");
-require('dotenv').config();
-
+const { regEx } = require('./swears.js');
+//require('dotenv').config();
 
 // Set some variables.
 const port = 3001;
@@ -18,21 +17,21 @@ const dir = path.join(__dirname, 'public');
 const ROOT_URL = `https://cms-${process.env.alias}.cloud.contensis.com/`;
 const PROJECT = process.env.projectId;
 const config = {
-    rootUrl: ROOT_URL, 
-    accessToken: process.env.accessToken,
-    projectId: PROJECT,
-    language: 'en-GB',
-  };
+  rootUrl: ROOT_URL,
+  accessToken: process.env.accessToken,
+  projectId: PROJECT,
+  language: 'en-GB',
+};
 const client = Client.create(config);
 const managementClient = manClient.create({
-    clientType: 'client_credentials',
-    clientDetails: {
-      clientId: process.env.clientId,
-      clientSecret: process.env.sharedSecret,
-    },
-    projectId: PROJECT,
-    rootUrl: ROOT_URL,
-  });
+  clientType: 'client_credentials',
+  clientDetails: {
+    clientId: process.env.clientId,
+    clientSecret: process.env.sharedSecret,
+  },
+  projectId: PROJECT,
+  rootUrl: ROOT_URL,
+});
 
 // Start the server.
 const app = express();
@@ -73,14 +72,14 @@ const sendEntries = (res, status) => {
     .then((data) => {
       res.status(status).json(data);
     });
-}
+};
 
 // Routes
 app.post('/comment/', (req, res) => {
   let msg = req.body.comment;
   console.log(`New comment received: ${msg}\n${new Date().toLocaleString()}`);
   if (regEx.test(msg)) {
-    console.log("Profanity detected.");
+    console.log('Profanity detected.');
     sendEntries(res, 401);
     return;
   }
@@ -95,21 +94,19 @@ app.post('/comment/', (req, res) => {
       dataFormat: 'entry',
     },
   };
-  sendComment(res,newEntry,managementClient);
+  sendComment(res, newEntry, managementClient);
 });
 
 app.get('/getComments/', (_, res) => {
-      console.log(
-        `Received a request for data: ${new Date().toLocaleString()}`
-      );
+  console.log(`Received a request for data: ${new Date().toLocaleString()}`);
   sendEntries(res, 200);
 });
 
 // Anything in the blocks path.
-app.all('/blocks*', function (_, res) {
+app.all('/comments*', function (_, res) {
   res.sendFile(path.join(dir, '/index.html'));
 });
 
-app.all('*', function (_,res) {
+app.all('*', function (_, res) {
   res.status(404).send('Page not found.');
 });
