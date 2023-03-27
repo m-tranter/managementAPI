@@ -9,12 +9,10 @@ const manClient =
 const { Client } = require('contensis-delivery-api');
 const cors = require('cors');
 const { regEx } = require('./swears.js');
-//require('dotenv').config();
-
-console.log(process.env.PORT);
+require('dotenv').config();
 
 // Set some variables.
-const port = process.env.PORT || 3001;
+const port = 3001;
 const dir = path.join(__dirname, 'public');
 const ROOT_URL = `https://cms-${process.env.alias}.cloud.contensis.com/`;
 const PROJECT = process.env.projectId;
