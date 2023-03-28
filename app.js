@@ -47,7 +47,7 @@ const myLogger = function (req, res, next) {
 }
 
 // Middleware
-app.use(express.static(dir));
+//app.use(express.static(dir));
 app.use(express.json());
 app.use(cors());
 app.use(myLogger);
@@ -111,7 +111,11 @@ app.get('/getComments/', (_, res) => {
 });
 
 
-
-app.all('/comments/*', function (_, res) {
+app.all('/comments*', function (_, res) {
   res.sendFile(path.join(dir, '/index.html'));
+});
+
+
+app.get("*", (req, res) => {
+  res.send("PAGE NOT FOUND.");
 });
