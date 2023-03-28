@@ -11,6 +11,7 @@ const cors = require('cors');
 const { regEx } = require('./swears.js');
 //require('dotenv').config();
 
+
 // Set some variables.
 const port = 3001;
 const dir = path.join(__dirname, 'public');
@@ -38,7 +39,6 @@ const app = express();
 app.listen(port, () => {
   console.log(`Server listening on port ${port}.`);
 });
-
 
 const myLogger = function (req, res, next) {
   console.log(`Incoming: ${req.url}`);
