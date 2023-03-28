@@ -116,7 +116,7 @@
 
       (function loadEntries() {
         myDisplay.innerText = 'Contacting the server.';
-        fetch(`/getComments`, { method: 'get' })
+        fetch(`/comments/getComments`, { method: 'get' })
           .then((response) => {
             if (!response.ok) {
               myDisplay.innerHTML = 'Something went wrong..';
@@ -204,7 +204,7 @@
         myBtn.disabled = true;
         myDisplay.innerText = 'Contacting the server.';
         let myDate = new Date().toLocaleString();
-        fetch('/comment', {
+        fetch('/comments/leaveComment', {
           method: 'post',
           body: JSON.stringify({ comment: msg, date: myDate }),
           headers: {

@@ -75,7 +75,7 @@ const sendEntries = (res, status) => {
 };
 
 // Routes
-app.post('/comment/', (req, res) => {
+app.post('/comments/leaveComment/', (req, res) => {
   let msg = req.body.comment;
   console.log(`New comment received: ${msg}\n${new Date().toLocaleString()}`);
   if (regEx.test(msg)) {
@@ -97,7 +97,7 @@ app.post('/comment/', (req, res) => {
   sendComment(res, newEntry, managementClient);
 });
 
-app.get('/getComments/', (_, res) => {
+app.get('/comments/getComments/', (_, res) => {
   console.log(`Received a request for data: ${new Date().toLocaleString()}`);
   sendEntries(res, 200);
 });
