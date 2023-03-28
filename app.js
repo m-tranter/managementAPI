@@ -9,7 +9,7 @@ const manClient =
 const { Client } = require('contensis-delivery-api');
 const cors = require('cors');
 const { regEx } = require('./swears.js');
-//require('dotenv').config();
+require('dotenv').config();
 
 // Set some variables.
 const port = 3001;
@@ -40,7 +40,7 @@ app.listen(port, () => {
 });
 
 // Middleware
-//app.use(express.static(dir));
+app.use(express.static(dir));
 app.use(express.json());
 app.use(cors());
 
@@ -75,7 +75,7 @@ const sendEntries = (res, status) => {
 };
 
 // Routes
-app.post('/comments/leaveComment/', (req, res) => {
+app.post('/leaveComment/', (req, res) => {
   let msg = req.body.comment;
   console.log(`New comment received: ${msg}\n${new Date().toLocaleString()}`);
   if (regEx.test(msg)) {
@@ -97,13 +97,13 @@ app.post('/comments/leaveComment/', (req, res) => {
   sendComment(res, newEntry, managementClient);
 });
 
-app.get('/comments/getComments/', (_, res) => {
+app.get('/getComments/', (_, res) => {
   console.log(`Received a request for data: ${new Date().toLocaleString()}`);
   sendEntries(res, 200);
 });
 
 
 
-app.all('/comments*/', function (_, res) {
+app.all('/comments/*', function (_, res) {
   res.sendFile(path.join(dir, '/index.html'));
 });
