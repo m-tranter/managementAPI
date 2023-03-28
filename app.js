@@ -37,6 +37,7 @@ const managementClient = manClient.create({
 // Start the server.
 const app = express();
 app.listen(port, () => {
+  console.log("Testing.");
   console.log(`Server listening on port ${port}.`);
 });
 
