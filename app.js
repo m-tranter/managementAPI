@@ -40,7 +40,7 @@ app.listen(port, () => {
 });
 
 // Middleware
-app.use(express.static(dir));
+//app.use(express.static(dir));
 app.use(express.json());
 app.use(cors());
 
@@ -104,6 +104,6 @@ app.get('/getComments/', (_, res) => {
 
 
 
-app.all('*', function (_, res) {
+app.all('/comments*/', function (_, res) {
   res.sendFile(path.join(dir, '/index.html'));
 });
