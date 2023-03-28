@@ -46,7 +46,6 @@ const myLogger = function (req, res, next) {
   next()
 }
 
-
 // Middleware
 app.use(express.static(dir));
 app.use(express.json());
