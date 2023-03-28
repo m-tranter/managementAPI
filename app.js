@@ -39,10 +39,18 @@ app.listen(port, () => {
   console.log(`Server listening on port ${port}.`);
 });
 
+
+const myLogger = function (req, res, next) {
+  console.log(`Incoming: ${req.url}`);
+  next()
+}
+
+
 // Middleware
 app.use(express.static(dir));
 app.use(express.json());
 app.use(cors());
+app.use(myLogger);
 
 // Function to sent the comment.
 function sendComment(res, entry, client) {
