@@ -18,7 +18,7 @@ const ROOT_URL = `https://cms-${process.env.alias}.cloud.contensis.com/`;
 const PROJECT = process.env.projectId;
 const config = {
   rootUrl: ROOT_URL,
-  accessToken: process.env.accessToken,
+  accessToken: "QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I",
   projectId: PROJECT,
   language: 'en-GB',
 };
@@ -37,7 +37,7 @@ console.log(process.env.accessToken);
 console.log(process.env.alias);
 console.log(process.env.clientId);
 console.log(process.env.projectId);
-console.log(process.env.alias);
+
 
 
 // Start the server.
