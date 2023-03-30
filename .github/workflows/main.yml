@@ -18,9 +18,9 @@ jobs:
       run: |
         docker login -u $USER -p $PASS
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag antiloquax/comment2:new1
+      run: docker build . --file Dockerfile --tag antiloquax/comment2:new2
     - name: Docker push
-      run: docker push antiloquax/comment2:new1
+      run: docker push antiloquax/comment2:new2
       
   job2:
     runs-on: ubuntu-latest
@@ -32,7 +32,7 @@ jobs:
         block-id: comment
         alias: chesheast
         project-id: blockstest
-        image-uri: "antiloquax/comment2:new1 "
+        image-uri: "antiloquax/comment2:new2 "
         client-id: ${{ secrets.Z_CLIENT_ID }}
         shared-secret: ${{ secrets.Z_SHARED_SECRET }}
         git-token: ${{ secrets.GIT_TOKEN }}
