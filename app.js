@@ -33,17 +33,10 @@ const managementClient = manClient.create({
   rootUrl: ROOT_URL,
 });
 
-console.log(process.env.accessToken);
-console.log(process.env.alias);
-console.log(process.env.clientId);
-console.log(process.env.projectId);
-
-
 
 // Start the server.
 const app = express();
 app.listen(port, () => {
-  console.log("Testing.");
   console.log(`Server listening on port ${port}.`);
 });
 
