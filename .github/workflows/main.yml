@@ -12,7 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Set current date as env variable
-      run: echo "TAG=antiloquax/comment2:$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
+      run: echo "TAG=antiloquax/comment2:$(date +'%Y_%m_%dT%H_%M_%S')" >> $GITHUB_ENV
     - name: Echo tag
       run: echo $TAG
     - name: Docker login
