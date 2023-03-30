@@ -30,13 +30,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+    - name: Set current date as env variable
+      run: echo "TAG=antiloquax/comment2:$(date +'%Y_%m_%dT%H_%M_%S')" >> $GITHUB_ENV
     - name: Contensis block push action
       uses: contensis/block-push@v1
       with:
         block-id: comment
         alias: chesheast
         project-id: blockstest
-        image-uri: ${{ TAG }}
+        image-uri: $TAG
         client-id: ${{ secrets.Z_CLIENT_ID }}
         shared-secret: ${{ secrets.Z_SHARED_SECRET }}
         git-token: ${{ secrets.GIT_TOKEN }}
