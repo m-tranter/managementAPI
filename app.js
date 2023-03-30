@@ -124,6 +124,4 @@ app.all('/comments*', function (_, res) {
 });
 
 
-app.get("*", (req, res) => {
-  res.send("PAGE NOT FOUND.");
-});
+
