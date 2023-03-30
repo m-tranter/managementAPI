@@ -36,7 +36,7 @@ jobs:
         block-id: comment
         alias: chesheast
         project-id: blockstest
-        image-uri: $TAG
+        image-uri: ${{ TAG }}
         client-id: ${{ secrets.Z_CLIENT_ID }}
         shared-secret: ${{ secrets.Z_SHARED_SECRET }}
         git-token: ${{ secrets.GIT_TOKEN }}
