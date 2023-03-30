@@ -48,7 +48,7 @@ app.listen(port, () => {
 });
 
 const myLogger = function (req, res, next) {
-  if (!req.url.startsWith('/?') {
+  if (!req.url.startsWith('/?')) {
   console.log(`Incoming: ${req.url}`);
   }
   next()
