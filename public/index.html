@@ -10,28 +10,8 @@
       integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
       crossorigin="anonymous"
     />
-    <style>
-      * {
-        box-sizing: border-box;
-      }
-      html {
-        height: 100%;
-        width: 100%;
-      }
-      textarea {
-        font-family: sans-serif;
-        font-size: 1.5rem;
-        display: block;
-      }
-      #display {
-        font-family: sans-serif;
-        font-size: 1rem;
-        height: 100px;
-      }
-    </style>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <title>Comment page</title>
-    
   </head>
   <body>
     <!-- Using Contensis Delivery API & JavaScript. -->
@@ -40,13 +20,13 @@
         <div class="col-lg-8">
           <h1 class="my-3">Leave a comment for the council</h1>
           <textarea
-            class="p-1 w-100"
+            class="p-1 w-100 comment-textarea"
             id="comment"
             placeholder="Enter your comment."
             rows="3"
           ></textarea>
           <button id="myBtn" class="btn my-3" type="button">Submit</button>
-          <div id="display" class="border p-3 mb-2">&nbsp;</div>
+          <div id="display-box" class="border p-3 mb-2">&nbsp;</div>
           <div id="tableDiv" class="container px-0 mt-3">
             <div class="table-responsive">
               <table id="myTable" class="table">
@@ -65,170 +45,6 @@
         </div>
       </div>
     </div>
-    
-    <script>
-      'use strict';
-      let item;
-      let items = [];
-      const rx_iso_date =
-        /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2})?(?:\.\d*)?Z?$/;
-      const myComment = document.getElementById('comment');
-      const divs = [
-        document.getElementById('loading'),
-        document.getElementById('tableDiv'),
-      ];
-      const myDisplay = document.getElementById('display');
-      const myBtn = document.getElementById('myBtn');
-      const myTable = document.getElementById('myTable');
-      const dateField = document.getElementById('dateField');
-      const commentField = document.getElementById('commentField');
-
-      myBtn.addEventListener('click', sendComment);
-      myComment.addEventListener('focus', clear);
-      dateField.addEventListener('click', () => sortByField('date'));
-      dateField.addEventListener(
-        'mouseover',
-        () => (dateField.style.backgroundColor = 'LightGreen')
-      );
-      dateField.addEventListener(
-        'mouseout',
-        () => (dateField.style.backgroundColor = 'White')
-      );
-      commentField.addEventListener('click', () => sortByField('comment'));
-      commentField.addEventListener(
-        'mouseover',
-        () => (commentField.style.backgroundColor = 'LightGreen')
-      );
-      commentField.addEventListener(
-        'mouseout',
-        () => (commentField.style.backgroundColor = 'White')
-      );
-
-      const refresh = (data) => {
-        items = data.items
-          ? createDates(data.items.slice()).sort(sortNum('date'))
-          : [];
-        redrawTable();
-        if (myDisplay.innerHTML.startsWith('Contacting')) {
-          myDisplay.innerHTML = '&nbsp';
-        }
-      };
-
-      (function loadEntries() {
-        myDisplay.innerText = 'Contacting the server.';
-        fetch(`/getComments`, { method: 'get' })
-          .then((response) => {
-            if (!response.ok) {
-              myDisplay.innerHTML = 'Something went wrong..';
-            }
-            return response.json();
-          })
-          .then((res) => {
-            refresh(res);
-          });
-      })();
-
-      function sortByField(f) {
-        let temp = [...items];
-        temp.sort(f === 'comment' ? sortStr(f) : sortNum(f));
-        items = temp.some((e, i) => e.index !== items[i].index)
-          ? (items = [...temp])
-          : (items = [...temp].reverse());
-        redrawTable();
-      }
-
-      function redrawTable() {
-        items.forEach(() => {
-          try {
-            myTable.deleteRow(1);
-          } catch (_) {}
-        });
-        items.forEach((item) => {
-          addRow(item);
-        });
-      }
-
-      function addRow(item) {
-        let row = myTable.insertRow(1);
-        let date = row.insertCell(0);
-        let comment = row.insertCell(1);
-        date.innerHTML = item.date.toLocaleDateString();
-        comment.innerHTML = item.comment;
-      }
-
-      function clear() {
-        myDisplay.innerHTML = '&nbsp;';
-      }
-
-      function sortStr(field) {
-        return (a, b) => {
-          let x = a[field].toLowerCase();
-          let y = b[field].toLowerCase();
-          if (x < y) {
-            return -1;
-          }
-          if (x > y) {
-            return 1;
-          }
-          return 0;
-        };
-      }
-
-      function sortNum(field) {
-        return (a, b) => {
-          return a[field] - b[field];
-        };
-      }
-
-      // Makes date into date objects and adds an index.
-      function createDates(arr) {
-        return arr.map((e, i) => {
-          e.index = i;
-          return Object.fromEntries(
-            Object.entries(e).map(([k, v]) =>
-              k.toLowerCase().includes('date') ||
-              (typeof v === 'string' && v.match(rx_iso_date))
-                ? [k, new Date(v)]
-                : [k, v]
-            )
-          );
-        });
-      }
-
-      function sendComment() {
-        let msg = myComment.value.trim();
-        if (!msg) {
-          return;
-        }
-        myComment.value = '';
-        myBtn.disabled = true;
-        myDisplay.innerText = 'Contacting the server.';
-        let myDate = new Date().toLocaleString();
-        fetch('/leaveComment', {
-          method: 'post',
-          body: JSON.stringify({ comment: msg, date: myDate }),
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-          },
-        })
-          .then((response) => {
-            if (response.ok) {
-              myDisplay.innerText = `We received your comment:\n"${msg}"`;
-              setTimeout(() => (myDisplay.innerHTML = '&nbsp;'), 1000);
-            } else if (response.status === 401) {
-              myDisplay.innerText =
-                'We cannot accept comments that contain profanity.';
-            } else {
-              myDisplay.innerText = 'Something went wrong.';
-            }
-            return response.json();
-          })
-          .then((res) => {
-            refresh(res);
-          })
-          .catch((err) => console.log(err));
-        myBtn.disabled = false;
-      }
-    </script>
+    <script src="./comment.js"></script>
   </body>
 </html>

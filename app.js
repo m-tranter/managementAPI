@@ -9,13 +9,13 @@ const manClient =
 const { Client } = require('contensis-delivery-api');
 const cors = require('cors');
 const { regEx } = require('./swears.js');
-//require('dotenv').config();
+require('dotenv').config();
 
-Object.keys(process.env).forEach(k => {
-  console.log(`${k}: ${process.env[k]}`)
-});
-
-
+/*
+ *Object.keys(process.env).forEach(k => {
+ *  console.log(`${k}: ${process.env[k]}`)
+ *});
+ */
 
 // Set some variables.
 const port = 3001;
@@ -24,7 +24,7 @@ const ROOT_URL = `https://cms-${process.env.alias}.cloud.contensis.com/`;
 const PROJECT = process.env.projectId;
 const config = {
   rootUrl: ROOT_URL,
-  accessToken: "QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I",
+  accessToken: 'QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I',
   projectId: PROJECT,
   language: 'en-GB',
 };
@@ -39,7 +39,6 @@ const managementClient = manClient.create({
   rootUrl: ROOT_URL,
 });
 
-
 // Start the server.
 const app = express();
 app.listen(port, () => {
@@ -48,13 +47,13 @@ app.listen(port, () => {
 
 const myLogger = function (req, res, next) {
   if (!req.url.startsWith('/?')) {
-  console.log(`Incoming: ${req.url}`);
+    console.log(`Incoming: ${req.url}`);
   }
-  next()
-}
+  next();
+};
 
 // Middleware
-//app.use(express.static(dir));
+app.use(express.static(dir));
 app.use(express.json());
 app.use(cors());
 app.use(myLogger);
@@ -117,10 +116,6 @@ app.get('/getComments/', (_, res) => {
   sendEntries(res, 200);
 });
 
-
 app.all('/comments*', function (_, res) {
   res.sendFile(path.join(dir, '/index.html'));
 });
-
-
-

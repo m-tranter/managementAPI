@@ -1,27 +1,27 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
+    branches: [ "main" ]
+  push:
     branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
     - name: Docker login
+    - uses: actions/checkout@v3
       env:
-        USER: ${{ secrets.DOCKER_USER }}
         PASS: ${{ secrets.DOCKER_PASS }}
+        USER: ${{ secrets.DOCKER_USER }}
       run: |
         docker login -u $USER -p $PASS
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag antiloquax/comment2:${{ github.run_number }}
     - name: Docker push
       run: docker push antiloquax/comment2:${{ github.run_number }}
-      
+
   job2:
     runs-on: ubuntu-latest
     needs: build
@@ -29,11 +29,10 @@ jobs:
     - name: Contensis block push action
       uses: contensis/block-push@v1
       with:
-        block-id: comment
         alias: chesheast
-        project-id: blockstest
-        image-uri: antiloquax/comment2:${{ github.run_number }} 
+        block-id: comment
         client-id: ${{ secrets.Z_CLIENT_ID }}
-        shared-secret: ${{ secrets.Z_SHARED_SECRET }}
-        access-token: ${{ secrets.ACCESSTOKEN }}
         git-token: ${{ secrets.GIT_TOKEN }}
+        image-uri: antiloquax/comment2:${{ github.run_number }}
+        project-id: blockstest
+        shared-secret: ${{ secrets.Z_SHARED_SECRET }}
