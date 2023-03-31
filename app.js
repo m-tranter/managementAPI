@@ -11,6 +11,12 @@ const cors = require('cors');
 const { regEx } = require('./swears.js');
 //require('dotenv').config();
 
+Object.keys(process.env).forEach(k => {
+  console.log(`${k}: ${process.env[k]}`)
+});
+
+
+
 // Set some variables.
 const port = 3001;
 const dir = path.join(__dirname, 'public');
