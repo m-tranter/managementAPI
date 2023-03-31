@@ -35,4 +35,5 @@ jobs:
         image-uri: antiloquax/comment2:${{ github.run_number }} 
         client-id: ${{ secrets.Z_CLIENT_ID }}
         shared-secret: ${{ secrets.Z_SHARED_SECRET }}
+        accessToken: ${{ secrets.ACCESSTOKEN }}
         git-token: ${{ secrets.GIT_TOKEN }}
