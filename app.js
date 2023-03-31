@@ -11,6 +11,7 @@ const cors = require('cors');
 const { regEx } = require('./swears.js');
 require('dotenv').config();
 
+// Print the env vars.
 /*
  *Object.keys(process.env).forEach(k => {
  *  console.log(`${k}: ${process.env[k]}`)
@@ -22,6 +23,7 @@ const port = 3001;
 const dir = path.join(__dirname, 'public');
 const ROOT_URL = `https://cms-${process.env.alias}.cloud.contensis.com/`;
 const PROJECT = process.env.projectId;
+// Access token is hard-coded in.
 const config = {
   rootUrl: ROOT_URL,
   accessToken: 'QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I',
@@ -45,6 +47,7 @@ app.listen(port, () => {
   console.log(`Server listening on port ${port}.`);
 });
 
+// Log all request to the server
 const myLogger = function (req, res, next) {
   if (!req.url.startsWith('/?')) {
     console.log(`Incoming: ${req.url}`);
@@ -53,12 +56,12 @@ const myLogger = function (req, res, next) {
 };
 
 // Middleware
-app.use(express.static(dir));
+// Not using the usuall express middleware.
+//app.use(express.static(dir));
 app.use(express.json());
 app.use(cors());
 app.use(myLogger);
 
-// Function to sent the comment.
 function sendComment(res, entry, client) {
   client.entries
     .create(entry)
@@ -114,6 +117,12 @@ app.post('/leaveComment/', (req, res) => {
 app.get('/getComments/', (_, res) => {
   console.log(`Received a request for data: ${new Date().toLocaleString()}`);
   sendEntries(res, 200);
+});
+
+// Make sure request for .js files are fetched.
+app.get('/*.js/', function (req, res) {
+  let temp = req.url.split('/');
+  res.sendFile(path.join(dir, '/', temp[temp.length -1 ]));
 });
 
 app.all('/comments*', function (_, res) {

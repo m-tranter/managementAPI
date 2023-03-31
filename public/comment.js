@@ -1,12 +1,7 @@
 'use strict';
-let item;
 let items = [];
 const rx_iso_date = /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2})?(?:\.\d*)?Z?$/;
 const myComment = document.getElementById('comment');
-const divs = [
-  document.getElementById('loading'),
-  document.getElementById('tableDiv'),
-];
 const myDisplay = document.getElementById('display-box');
 const myBtn = document.getElementById('myBtn');
 const myTable = document.getElementById('myTable');
@@ -38,6 +33,10 @@ const refresh = (data) => {
   items = data.items
     ? createDates(data.items.slice()).sort(sortNum('date'))
     : [];
+  // Add index to check order later on.
+  items.forEach((e, i) => {
+    e.index = i;
+  })
   redrawTable();
   if (myDisplay.innerHTML.startsWith('Contacting')) {
     myDisplay.innerHTML = '&nbsp';
@@ -110,10 +109,9 @@ function sortNum(field) {
   };
 }
 
-// Makes date into date objects and adds an index.
+// Makes date into date objects.
 function createDates(arr) {
-  return arr.map((e, i) => {
-    e.index = i;
+  return arr.map((e) => {
     return Object.fromEntries(
       Object.entries(e).map(([k, v]) =>
         k.toLowerCase().includes('date') ||
