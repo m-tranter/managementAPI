@@ -6,10 +6,9 @@ const express = require('express');
 const path = require('path');
 const manClient =
   require('contensis-management-api/lib/client').UniversalClient;
-const { Client } = require('contensis-delivery-api');
 const cors = require('cors');
 const { regEx } = require('./swears.js');
-require('dotenv').config();
+//require('dotenv').config();
 
 // Print the env vars.
 /*
@@ -23,14 +22,6 @@ const port = 3001;
 const dir = path.join(__dirname, 'public');
 const ROOT_URL = `https://cms-${process.env.alias}.cloud.contensis.com/`;
 const PROJECT = process.env.projectId;
-// Access token is hard-coded in.
-const config = {
-  rootUrl: ROOT_URL,
-  accessToken: 'QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I',
-  projectId: PROJECT,
-  language: 'en-GB',
-};
-const client = Client.create(config);
 const managementClient = manClient.create({
   clientType: 'client_credentials',
   clientDetails: {
@@ -79,16 +70,12 @@ function sendComment(res, entry, client) {
 }
 
 const sendEntries = (res, status) => {
-  client.entries
-    .list({
-      contentTypeId: 'comment',
-      versionStatus: 'latest',
-      pageOptions: { pageIndex: 0, pageSize: 500 },
-      orderBy: ['sys.id'],
-    })
-    .then((data) => {
-      res.status(status).json(data);
-    });
+  fetch(
+    `${ROOT_URL}/api/delivery/projects/${PROJECT}/contenttypes/comment/entries?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I&versionStatus=latest`,
+    { method: 'get' }
+  ).then((data) => {
+    res.status(status).json(data);
+  });
 };
 
 // Routes
@@ -114,15 +101,10 @@ app.post('/leaveComment/', (req, res) => {
   sendComment(res, newEntry, managementClient);
 });
 
-app.get('/getComments/', (_, res) => {
-  console.log(`Received a request for data: ${new Date().toLocaleString()}`);
-  sendEntries(res, 200);
-});
-
 // Make sure request for .js files are fetched.
 app.get('/*.js/', function (req, res) {
   let temp = req.url.split('?')[0].split('/');
-  res.sendFile(path.join(dir, '/', temp[temp.length -1 ]));
+  res.sendFile(path.join(dir, '/', temp[temp.length - 1]));
 });
 
 app.all('/comments*', function (_, res) {

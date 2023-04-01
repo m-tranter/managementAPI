@@ -9,14 +9,13 @@
   "author": "Mark Tranter",
   "license": "ISC",
   "dependencies": {
-    "contensis-delivery-api": "^1.3.0",
     "contensis-management-api": "^2.1.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.2",
     "express": "^4.18.1",
     "path": "^0.12.7"
   },
   "devDependencies": {
+    "dotenv": "^16.0.2",
     "nodemon": "^2.0.21"
   }
 }

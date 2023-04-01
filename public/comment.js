@@ -36,7 +36,7 @@ const refresh = (data) => {
   // Add index to check order later on.
   items.forEach((e, i) => {
     e.index = i;
-  })
+  });
   redrawTable();
   if (myDisplay.innerHTML.startsWith('Contacting')) {
     myDisplay.innerHTML = '&nbsp';
@@ -45,7 +45,10 @@ const refresh = (data) => {
 
 (function loadEntries() {
   myDisplay.innerText = 'Contacting the server.';
-  fetch(`/getComments`, { method: 'get' })
+  fetch(
+    'https://cms-chesheast.cloud.contensis.com/api/delivery/projects/blockstest/contenttypes/comment/entries?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I&versionStatus=latest',
+    { method: 'get' }
+  )
     .then((response) => {
       if (!response.ok) {
         myDisplay.innerHTML = 'Something went wrong..';
