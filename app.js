@@ -18,6 +18,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
  *});
  */
 
+
 // Set some variables.
 const port = 3001;
 const dir = path.join(__dirname, 'public');
