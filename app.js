@@ -2,14 +2,14 @@
 'use strict';
 
 // Modules.
-import express from "express";
-import path from "path";
-import { NodejsClient } from "contensis-management-api/lib/client/nodejs-client.js";
-import cors from "cors";
-import {regEx} from "./swears.js";
+//import {} from 'dotenv/config'
+import express from 'express';
+import path from 'path';
+import fetch from 'node-fetch';
+import cors from 'cors';
+import { regEx } from './swears.js';
 import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-import {} from 'dotenv/config'
 
 // Print the env vars.
 /*
@@ -23,15 +23,21 @@ const port = 3001;
 const dir = path.join(__dirname, 'public');
 const ROOT_URL = `https://cms-${process.env.alias}.cloud.contensis.com/`;
 const PROJECT = process.env.projectId;
-const managementClient = NodejsClient.create({
-  clientType: 'client_credentials',
-  clientDetails: {
-    clientId: process.env.clientId,
-    clientSecret: process.env.sharedSecret,
-  },
-  projectId: PROJECT,
-  rootUrl: ROOT_URL,
-});
+
+// Get an authorization token.
+const response = await fetch(
+  'https://cms-chesheast.cloud.contensis.com/authenticate/connect/token',
+  {
+    method: 'post',
+    body: `grant_type=client_credentials&client_id=${process.env.clientId}&client_secret=${process.env.sharedSecret}&scope=Entry_Read ContentType_Read Project_Read Entry_Write`,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Accept: 'application/json',
+    },
+  }
+);
+const data = await response.json();
+const AUTH = data.access_token;
 
 // Start the server.
 const app = express();
@@ -40,7 +46,7 @@ app.listen(port, () => {
 });
 
 // Log all request to the server
-const myLogger = function (req, res, next) {
+const myLogger = function (req, _, next) {
   if (!req.url.startsWith('/?')) {
     console.log(`Incoming: ${req.url}`);
   }
@@ -54,30 +60,33 @@ app.use(express.json());
 app.use(cors());
 app.use(myLogger);
 
-function sendComment(res, entry, client) {
-  client.entries
-    .create(entry)
-    .then((result) => {
-      if (result) {
-        sendEntries(res, 200);
-      } else {
-        res.status(400).send();
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(400).send();
-    });
+async function sendComment(res, entry) {
+  const response = await fetch(
+    'https://cms-chesheast.cloud.contensis.com/api/management/projects/blockstest/entries',
+    {
+      method: 'post',
+      headers: {
+        Authorization: 'bearer ' + AUTH,
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: JSON.stringify(entry),
+    }
+  );
+  if (response.ok) {
+    setTimeout(() => sendEntries(res, 200), 100);
+  } else {
+    res.status(400).send();
+  }
 }
 
-const sendEntries = (res, status) => {
-  fetch(
+async function sendEntries(res, status) {
+  const response = await fetch(
     `${ROOT_URL}/api/delivery/projects/${PROJECT}/contenttypes/comment/entries?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I&versionStatus=latest`,
     { method: 'get' }
-  ).then((data) => {
-    res.status(status).json(data);
-  });
-};
+  );
+  const data = await response.json();
+  res.status(status).json(data);
+}
 
 // Routes
 app.post('/leaveComment/', (req, res) => {
@@ -99,7 +108,7 @@ app.post('/leaveComment/', (req, res) => {
       dataFormat: 'entry',
     },
   };
-  sendComment(res, newEntry, managementClient);
+  sendComment(res, newEntry);
 });
 
 // Make sure request for .js files are fetched.
