@@ -1,6 +1,7 @@
 {
   "name": "managementapi",
   "version": "1.0.0",
+  "type": "module",
   "description": "App to create entries using Contensis Management API.",
   "main": "app.js",
   "scripts": {

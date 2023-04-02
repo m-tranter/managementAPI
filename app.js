@@ -2,13 +2,14 @@
 'use strict';
 
 // Modules.
-const express = require('express');
-const path = require('path');
-const manClient =
-  require('contensis-management-api/lib/client').UniversalClient;
-const cors = require('cors');
-const { regEx } = require('./swears.js');
-//require('dotenv').config();
+import express from "express";
+import path from "path";
+import { NodejsClient } from "contensis-management-api/lib/client/nodejs-client.js";
+import cors from "cors";
+import {regEx} from "./swears.js";
+import { fileURLToPath } from 'url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import {} from 'dotenv/config'
 
 // Print the env vars.
 /*
@@ -22,7 +23,7 @@ const port = 3001;
 const dir = path.join(__dirname, 'public');
 const ROOT_URL = `https://cms-${process.env.alias}.cloud.contensis.com/`;
 const PROJECT = process.env.projectId;
-const managementClient = manClient.create({
+const managementClient = NodejsClient.create({
   clientType: 'client_credentials',
   clientDetails: {
     clientId: process.env.clientId,
