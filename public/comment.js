@@ -7,6 +7,7 @@ const myBtn = document.getElementById('myBtn');
 const myTable = document.getElementById('myTable');
 const dateField = document.getElementById('dateField');
 const commentField = document.getElementById('commentField');
+let firstSort;
 
 myBtn.addEventListener('click', sendComment);
 myComment.addEventListener('focus', clear);
@@ -30,13 +31,10 @@ commentField.addEventListener(
 );
 
 const refresh = (data) => {
+  firstSort = true;
   items = data.items
-    ? createDates(data.items.slice()).sort(sortNum('date'))
+    ? createDates(data.items.slice()).sort(sortNum('date')).reverse()
     : [];
-  // Add index to check order later on.
-  items.forEach((e, i) => {
-    e.index = i;
-  });
   redrawTable();
   if (myDisplay.innerHTML.startsWith('Contacting')) {
     myDisplay.innerHTML = '&nbsp';
@@ -63,10 +61,15 @@ const refresh = (data) => {
 function sortByField(f) {
   let temp = [...items];
   temp.sort(f === 'comment' ? sortStr(f) : sortNum(f));
-  items = temp.some((e, i) => e.index !== items[i].index)
-    ? (items = [...temp])
-    : (items = [...temp].reverse());
-  redrawTable();
+  if (!firstSort) {
+    items = temp.every((e, i) => e[f] === items[i][f])
+      ? [...temp].reverse()
+      : [...temp];
+  } else {
+    firstSort = false;
+    items = [...temp].reverse();
+  }
+  updateTable();
 }
 
 function redrawTable() {
@@ -81,14 +84,13 @@ function redrawTable() {
   });
 }
 
-//function updateTable() {
-  //items.forEach((item, i) => {
-      //let row = myTable.rows[i + 1];
-      //row.cells[0].innerHTML = item.dateString;
-      //row.cells[1].innerHTML = item.comment;
-  //});
-//}
-
+function updateTable() {
+  items.forEach((item, i) => {
+    let row = myTable.rows[i + 1];
+    row.cells[0].innerHTML = item.dateString;
+    row.cells[1].innerHTML = item.comment;
+  });
+}
 
 function addRow(item) {
   let row = myTable.insertRow(1);
@@ -118,7 +120,7 @@ function sortStr(field) {
 
 function sortNum(field) {
   return (a, b) => {
-    return a[field] - b[field];
+    return b[field] - a[field];
   };
 }
 
