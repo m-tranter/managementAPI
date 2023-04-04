@@ -1,6 +1,5 @@
 'use strict';
 let items = [];
-const rx_iso_date = /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2})?(?:\.\d*)?Z?$/;
 const myComment = document.getElementById('comment');
 const myDisplay = document.getElementById('display-box');
 const myBtn = document.getElementById('myBtn');
