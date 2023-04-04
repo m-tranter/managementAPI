@@ -70,21 +70,31 @@ function sortByField(f) {
 }
 
 function redrawTable() {
-  items.forEach(() => {
-    try {
+  let l = myTable.rows.length;
+  if (l > 1) {
+    for (let i = 1; i < l; i++) {
       myTable.deleteRow(1);
-    } catch (_) {}
-  });
+    }
+  }
   items.forEach((item) => {
     addRow(item);
   });
 }
 
+//function updateTable() {
+  //items.forEach((item, i) => {
+      //let row = myTable.rows[i + 1];
+      //row.cells[0].innerHTML = item.dateString;
+      //row.cells[1].innerHTML = item.comment;
+  //});
+//}
+
+
 function addRow(item) {
   let row = myTable.insertRow(1);
   let date = row.insertCell(0);
   let comment = row.insertCell(1);
-  date.innerHTML = item.date.toLocaleDateString();
+  date.innerHTML = item.dateString;
   comment.innerHTML = item.comment;
 }
 
@@ -115,14 +125,9 @@ function sortNum(field) {
 // Makes date into date objects.
 function createDates(arr) {
   return arr.map((e) => {
-    return Object.fromEntries(
-      Object.entries(e).map(([k, v]) =>
-        k.toLowerCase().includes('date') ||
-        (typeof v === 'string' && v.match(rx_iso_date))
-          ? [k, new Date(v)]
-          : [k, v]
-      )
-    );
+    e.date = new Date(e.date);
+    e.dateString = e.date.toLocaleDateString();
+    return e;
   });
 }
 
