@@ -47,7 +47,7 @@ function drawTable(items) {
       'border-secodary'
     );
     img.src = e.image
-      ? `https://preview-blockstest-chesheast.cloud.contensis.com/${imgUri(
+      ? `https://preview-blockstest-chesheast.cloud.contensis.com${imgUri(
           e.image
         )}`
       : '';
