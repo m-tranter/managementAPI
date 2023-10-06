@@ -1,0 +1,55 @@
+*:root {
+  --cec-green: #206c49;
+  --cec-lg: #9ee9bf;
+}
+
+body {
+  font-size: 19px;
+}
+
+h1,
+h2 {
+  color: var(--cec-green) !important;
+}
+
+#my-btn {
+  background: var(--cec-green);
+  color: White;
+  border: 1px solid rgb(0 0 0 0%);
+}
+
+#my-btn:hover {
+  background: var(--cec-lg);
+  color: Black;
+  border: 1px solid Black;
+}
+
+.comment-textarea {
+  font-family: sans-serif;
+  font-size: 1.5rem;
+  display: block;
+}
+
+.thumb {
+  max-height: 75px;
+}
+
+.thumb2 {
+  max-height: 100px;
+}
+
+th[scope='col'] {
+  border-bottom: 2px solid var(--cec-green);
+}
+
+.msg {
+  font-family: sans-serif;
+  font-size: 1rem;
+  height: 3rem;
+  background-color: Wheat;
+}
+
+#image-upload {
+  height: 25vh;
+}
+
