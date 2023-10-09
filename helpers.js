@@ -16,7 +16,7 @@ const sortDate = (a, b) => {
 
 const imgUri = (i) => {
   let temp = i.asset.sys.uri.split('.');
-  return `https://preview-blockstest-chesheast.cloud.contensis.com${temp[0]}.${temp[2]}`;
+  return `${temp[0]}.${temp[2]}`;
 };
 
 const makeTable = (arr) => {
