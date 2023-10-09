@@ -1,7 +1,6 @@
 // An app to interface with the Contensis Management & Delivery APIs.
 'use strict';
 
-// Modules.
 //import {} from 'dotenv/config';
 import { v4 as uuidv4 } from 'uuid';
 import express from 'express';
