@@ -1,7 +1,8 @@
 // An app to interface with the Contensis Management & Delivery APIs.
 'use strict';
 
-//import {} from 'dotenv/config';
+// Modules.
+import {} from 'dotenv/config';
 import { v4 as uuidv4 } from 'uuid';
 import express from 'express';
 import path from 'path';
@@ -13,8 +14,10 @@ import multer from 'multer';
 import fs from 'fs';
 import index from './index.js';
 import { delFile, createDates, sortDate, makeTable } from './helpers.js';
+
 import ejs from 'ejs';
 import { NodejsClient } from 'contensis-management-api/lib/client/nodejs-client.js';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Set some variables.
@@ -35,7 +38,6 @@ const client = NodejsClient.create({
   rootUrl: ROOT_URL,
 });
 
-
 // Start the server.
 const app = express();
 app.listen(port, () => {
@@ -54,7 +56,7 @@ app.use(cors());
 app.use(myLogger);
 
 async function sendImage(file) {
-  client.entries
+  return client.entries
     .createAsset(
       {
         title: file.split('.')[0],
@@ -68,11 +70,10 @@ async function sendImage(file) {
       '/images/comments'
     )
     .then((result) => {
-      console.log(result);
       return result;
     })
     .catch((error) => {
-      console.log(`sendImage error: ${error}`);
+      console.log(error);
       return error;
     });
 }
@@ -89,20 +90,6 @@ async function sendEntries(res, msg = '') {
 
 // Routes
 app.post('/', upload.single('image'), async (req, res) => {
-  let fileId;
-  try {
-    if (!req.file) {
-      console.log('No image submitted.');
-    } else {
-      fs.writeFileSync(req.file.originalname, req.file.buffer);
-      let apiRes = await sendImage(req.file.originalname);
-      fileId = apiRes.sys.id;
-      console.log(`Created an asset - fileId: ${fileId}`);
-      setTimeout(delFile(req.file.originalname), 1000);
-    }
-  } catch (error) {
-    console.error(error);
-  }
   let msg = req.body.comment;
   let date = new Date();
   console.log(`New comment received: ${msg}\n${date.toLocaleString()}`);
@@ -124,10 +111,13 @@ app.post('/', upload.single('image'), async (req, res) => {
       dataFormat: 'entry',
     },
   };
-
-  if (fileId) {
-    newEntry.image.asset.sys.id = fileId;
+  if (req.file) {
+    fs.writeFileSync(req.file.originalname, req.file.buffer);
+    let apiRes = await sendImage(req.file.originalname);
+    newEntry.image.asset.sys.id  = apiRes.sys.id;
+    setTimeout(() => delFile(req.file.originalname), 5000);
   }
+
   client.entries
     .create(newEntry)
     .then((result) => {

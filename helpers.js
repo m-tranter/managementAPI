@@ -1,6 +1,7 @@
 'use strict';
 import fs from 'fs';
 
+// Makes date into date objects.
 function createDates(arr) {
   return arr.map((e) => {
     e.date = new Date(e.date);
@@ -14,8 +15,8 @@ const sortDate = (a, b) => {
 };
 
 const imgUri = (i) => {
-  let temp = i.asset.sys.uri.split('.');
-  return `${temp[0]}.${temp[2]}`;
+  let arr = i ? i.asset.sys.uri.split('.') : [];
+  return i ? `https://preview-blockstest-chesheast.cloud.contensis.com${arr[0]}.${arr[2]}` : '/static/placeholder.png';
 };
 
 const makeTable = (arr) => {
@@ -31,6 +32,7 @@ const makeTable = (arr) => {
   }, '');
 };
 
+/** Delete files from the server. */
 function delFile(file) {
     fs.unlink(file, function(err) {
       if (err) {
