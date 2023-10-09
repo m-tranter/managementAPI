@@ -55,6 +55,8 @@ app.use(express.json());
 app.use(cors());
 app.use(myLogger);
 
+let display = '';
+
 async function sendImage(file) {
   return client.entries
     .createAsset(
@@ -78,19 +80,24 @@ async function sendImage(file) {
     });
 }
 
-async function sendEntries(res, msg = '') {
+async function sendEntries(res) {
   const response = await fetch(
     `${ROOT_URL}/api/delivery/projects/${PROJECT}/contenttypes/comment/entries?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I&versionStatus=latest`,
     { method: 'get' }
   );
   const data = await response.json();
   const table = makeTable(createDates(data.items).sort(sortDate));
-  res.send(ejs.render(index, { table, msg }));
+  res.send(ejs.render(index, { table, display }));
 }
 
 // Routes
 app.post('/', upload.single('image'), async (req, res) => {
-  let msg = req.body.comment;
+  let msg = req.body.comment.trim();
+  if (!msg.length) {
+    display = 'Empty comments cannot be accepted.';
+    sendEntries(res);
+    return;
+  }
   let date = new Date();
   console.log(`New comment received: ${msg}\n${date.toLocaleString()}`);
   let newEntry = {
@@ -114,8 +121,12 @@ app.post('/', upload.single('image'), async (req, res) => {
   if (req.file) {
     fs.writeFileSync(req.file.originalname, req.file.buffer);
     let apiRes = await sendImage(req.file.originalname);
-    newEntry.image.asset.sys.id  = apiRes.sys.id;
+    newEntry.image.asset.sys.id = apiRes.sys.id;
+    display =
+      'We received your comment. There may be a delay before your image is available.';
     setTimeout(() => delFile(req.file.originalname), 5000);
+  } else {
+    display = 'We received your comment.';
   }
 
   client.entries
@@ -125,6 +136,7 @@ app.post('/', upload.single('image'), async (req, res) => {
       return res.end();
     })
     .catch((error) => {
+      display = 'Something went wrong';
       res.writeHead(301, { Location: '/comments' });
       return res.end();
     });

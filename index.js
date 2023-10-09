@@ -22,13 +22,14 @@ const index = `
           <h1 class="my-3">Leave a comment for the council</h1>
           <form
             enctype="multipart/form-data"
-            action="/comments/leavecomment"
+            action="/"
             method="POST"
           >
             <textarea
               class="p-1 w-100 comment-textarea"
               id="comment"
               name="comment"
+              required
               placeholder="Enter your comment."
               rows="3"
             ></textarea>
@@ -55,8 +56,14 @@ const index = `
             </button>
           </form>
 
-          <div class="d-none msg border p-2 mb-2 rounded">
-            <p id="display-box" class="mb-0"><%= msg %></p>
+          <div class="row msg border p-2 mb-2 rounded">
+            <div class="col-11">
+              <p id="display-box" class="mb-0"><%= display %></p>
+            </div>
+          <div class="col-1">
+            <div id="spinner" class="d-none spinner-border" role="status">
+            </div>
+          </div>
           </div>
           <div id="tableDiv" class="container px-0 mt-3">
             <div class="table-responsive">
