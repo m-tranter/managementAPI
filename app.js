@@ -28,8 +28,8 @@ const upload = multer({ storage: storage });
 const client = NodejsClient.create({
   clientType: 'client_credentials',
   clientDetails: {
-    clientId: process.env.clientId,
-    clientSecret: process.env.sharedSecret,
+    clientId: process.env.CONTENSIS_CLIENT_ID,
+    clientSecret: process.env.CONTENSIS_CLIENT_SECRET,
   },
   projectId: PROJECT,
   rootUrl: ROOT_URL,
