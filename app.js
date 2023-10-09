@@ -2,7 +2,7 @@
 'use strict';
 
 // Modules.
-//import {} from 'dotenv/config';
+import {} from 'dotenv/config';
 import { v4 as uuidv4 } from 'uuid';
 import express from 'express';
 import path from 'path';
@@ -78,18 +78,18 @@ async function sendImage(file) {
     });
 }
 
-async function sendEntries(res, msg="") {
+async function sendEntries(res, msg = '') {
   const response = await fetch(
     `${ROOT_URL}/api/delivery/projects/${PROJECT}/contenttypes/comment/entries?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I&versionStatus=latest`,
     { method: 'get' }
   );
   const data = await response.json();
   const table = makeTable(createDates(data.items).sort(sortDate));
-  res.send(ejs.render(index, {table, msg}));
+  res.send(ejs.render(index, { table, msg }));
 }
 
 // Routes
-app.post('/leaveComment/', upload.single('image'), async (req, res) => {
+app.post('/', upload.single('image'), async (req, res) => {
   let fileId;
   try {
     if (!req.file) {
@@ -146,6 +146,6 @@ app.get(/.*\.(js|css|png)$/, (req, res) => {
   res.sendFile(path.join(dir, req.url));
 });
 
-app.use('*', function (_, res) {
+app.get('*', function (_, res) {
   sendEntries(res);
 });
