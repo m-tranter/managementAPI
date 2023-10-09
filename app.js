@@ -2,7 +2,7 @@
 'use strict';
 
 // Modules.
-//import {} from 'dotenv/config';
+import {} from 'dotenv/config';
 import { v4 as uuidv4 } from 'uuid';
 import express from 'express';
 import path from 'path';
@@ -17,6 +17,7 @@ import { delFile, createDates, sortDate, makeTable } from './helpers.js';
 
 import ejs from 'ejs';
 import { NodejsClient } from 'contensis-management-api/lib/client/nodejs-client.js';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Set some variables.
@@ -73,7 +74,8 @@ async function sendImage(file) {
       return result;
     })
     .catch((error) => {
-      throw error;
+      console.log(error);
+      return error;
     });
 }
 
@@ -88,7 +90,7 @@ async function sendEntries(res, msg = '') {
 }
 
 // Routes
-app.post('*', upload.single('image'), async (req, res) => {
+app.post('/', upload.single('image'), async (req, res) => {
   let fileId;
   try {
     if (!req.file) {
@@ -131,11 +133,11 @@ app.post('*', upload.single('image'), async (req, res) => {
   client.entries
     .create(newEntry)
     .then((result) => {
-      res.writeHead(301, { Location: '/' });
+      res.writeHead(301, { Location: '/comments' });
       return res.end();
     })
     .catch((error) => {
-      res.writeHead(301, { Location: '/' });
+      res.writeHead(301, { Location: '/comments' });
       return res.end();
     });
 });
