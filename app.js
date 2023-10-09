@@ -57,7 +57,7 @@ app.use(myLogger);
 
 async function sendImage(file) {
   console.log(file);
-  return client.entries
+  client.entries
     .createAsset(
       {
         title: file.split('.')[0],
