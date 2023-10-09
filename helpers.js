@@ -1,7 +1,6 @@
 'use strict';
 import fs from 'fs';
 
-// Makes date into date objects.
 function createDates(arr) {
   return arr.map((e) => {
     e.date = new Date(e.date);
@@ -32,7 +31,6 @@ const makeTable = (arr) => {
   }, '');
 };
 
-/** Delete files from the server. */
 function delFile(file) {
     fs.unlink(file, function(err) {
       if (err) {
