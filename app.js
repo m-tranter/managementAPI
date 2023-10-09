@@ -2,7 +2,7 @@
 'use strict';
 
 // Modules.
-//import {} from 'dotenv/config';
+import {} from 'dotenv/config';
 import { v4 as uuidv4 } from 'uuid';
 import express from 'express';
 import path from 'path';
@@ -11,8 +11,11 @@ import cors from 'cors';
 import { regEx } from './swears.js';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
-import axios from 'axios';
-import fs, { readFileSync } from 'fs';
+import fs from 'fs';
+import index from './index.js';
+import { delFile, createDates, sortDate, makeTable } from './helpers.js';
+
+import ejs from 'ejs';
 import { NodejsClient } from 'contensis-management-api/lib/client/nodejs-client.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -75,14 +78,14 @@ async function sendImage(file) {
     });
 }
 
-async function sendEntries(res, status) {
+async function sendEntries(res, msg="") {
   const response = await fetch(
     `${ROOT_URL}/api/delivery/projects/${PROJECT}/contenttypes/comment/entries?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I&versionStatus=latest`,
     { method: 'get' }
   );
-  let data = await response.json();
-  console.log(data);
-  res.status(status).json(data);
+  const data = await response.json();
+  const table = makeTable(createDates(data.items).sort(sortDate));
+  res.send(ejs.render(index, {table, msg}));
 }
 
 // Routes
@@ -96,6 +99,7 @@ app.post('/leaveComment/', upload.single('image'), async (req, res) => {
       let apiRes = await sendImage(req.file.originalname);
       fileId = apiRes.sys.id;
       console.log(`Created an asset - fileId: ${fileId}`);
+      setTimeout(delFile(req.file.originalname), 1000);
     }
   } catch (error) {
     console.error(error);
@@ -128,12 +132,10 @@ app.post('/leaveComment/', upload.single('image'), async (req, res) => {
   client.entries
     .create(newEntry)
     .then((result) => {
-      console.log('API call result: ', result);
       res.writeHead(301, { Location: '/' });
       return res.end();
     })
     .catch((error) => {
-      console.log('API call error: ', error);
       res.writeHead(301, { Location: '/' });
       return res.end();
     });
@@ -144,6 +146,6 @@ app.get(/.*\.(js|css|png)$/, (req, res) => {
   res.sendFile(path.join(dir, req.url));
 });
 
-app.all('*', function (_, res) {
-  res.sendFile(path.join(dir, '/index.html'));
+app.use('*', function (_, res) {
+  sendEntries(res);
 });

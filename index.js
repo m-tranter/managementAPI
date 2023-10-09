@@ -1,3 +1,4 @@
+const index = `
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -49,13 +50,13 @@
                 />
               </div>
             </div>
-            <button id="my-btn" class="btn mt-2 mb-3" type="button">
+            <button id="my-btn" class="btn mt-2 mb-3" >
               Submit
             </button>
           </form>
 
-          <div class="msg border p-2 mb-2 rounded">
-            <p id="display-box" class="mb-0">&nbsp;</p>
+          <div class="d-none msg border p-2 mb-2 rounded">
+            <p id="display-box" class="mb-0"><%= msg %></p>
           </div>
           <div id="tableDiv" class="container px-0 mt-3">
             <div class="table-responsive">
@@ -70,7 +71,7 @@
                     <th id="image" scope="col">Image</th>
                   </tr>
                 </thead>
-                <tbody id="tbody"></tbody>
+                <tbody><%- table %></tbody>
               </table>
             </div>
           </div>
@@ -80,3 +81,6 @@
     <script src="/static/comment.js"></script>
   </body>
 </html>
+`;
+
+export default index;
