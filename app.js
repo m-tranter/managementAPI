@@ -34,7 +34,7 @@ const client = NodejsClient.create({
   projectId: PROJECT,
   rootUrl: ROOT_URL,
 });
-Object.keys(process.env).forEach(k => console.log(`${k}: ${process.env[k]}`));
+
 
 // Start the server.
 const app = express();
@@ -68,6 +68,7 @@ async function sendImage(file) {
       '/images/comments'
     )
     .then((result) => {
+      console.log(result);
       return result;
     })
     .catch((error) => {
