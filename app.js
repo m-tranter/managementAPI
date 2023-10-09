@@ -88,6 +88,7 @@ async function sendEntries(res) {
   const data = await response.json();
   const table = makeTable(createDates(data.items).sort(sortDate));
   res.send(ejs.render(index, { table, display }));
+  display = '';
 }
 
 // Routes
@@ -127,15 +128,18 @@ app.post('/', upload.single('image'), async (req, res) => {
     setTimeout(() => delFile(req.file.originalname), 5000);
   } else {
     display = 'We received your comment.';
+    newEntry.image = null;
   }
-
+  console.log(newEntry);
   client.entries
     .create(newEntry)
     .then((result) => {
+      console.log(result);
       res.writeHead(301, { Location: '/comments' });
       return res.end();
     })
     .catch((error) => {
+      console.log(error);
       display = 'Something went wrong';
       res.writeHead(301, { Location: '/comments' });
       return res.end();

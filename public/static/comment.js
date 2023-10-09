@@ -5,7 +5,7 @@ const img = document.getElementById('myImg');
 const img_upload = document.getElementById('img-upload');
 const display = document.getElementById('display-box');
 const spinner = document.getElementById('spinner');
-const comment = document.getElementById('comment ');
+const comment = document.getElementById('comment');
 
 img_picker.addEventListener('change', function () {
   if (this.files && this.files[0]) {
@@ -14,11 +14,11 @@ img_picker.addEventListener('change', function () {
   }
 });
 
-display.addEventListener('focus', () => (display.innerHTML = ''));
+comment.addEventListener('focus', () => (display.innerHTML = ''));
 
 myBtn.addEventListener('click', () => {
   display.innerHTML = '';
-  if (comment.value.trim()) {
+  if (comment.value && comment.value.trim()) {
     spinner.classList.remove('d-none');
   }
 });

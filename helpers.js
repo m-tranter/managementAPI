@@ -14,11 +14,11 @@ const sortDate = (a, b) => {
   return b.date - a.date;
 };
 
-const imgUri = (i) => {
+const imgTag = (i) => {
   let arr = i ? i.asset.sys.uri.split('.') : [];
   return i
-    ? `https://preview-blockstest-chesheast.cloud.contensis.com${arr[0]}.${arr[2]}`
-    : '/static/placeholder.png';
+    ? `class="thumb img-fluid border border-secondary" src="https://preview-blockstest-chesheast.cloud.contensis.com${arr[0]}.${arr[2]}" onerror="this.oneerror=null;this.src='/static/reload.jpg';"`
+    : 'class="thumb img-fluid" src="/static/placeholder.png"';
 };
 
 const makeTable = (arr) => {
@@ -27,10 +27,7 @@ const makeTable = (arr) => {
       <tr>
         <td>${e.dateString}</td>
         <td>${e.comment}</td>
-        <td><img class="thumb img-fluid border border-secondary"
-    src=${imgUri(
-      e.image
-    )} onerror="this.onerror=null;this.src='/static/reload.jpg';"</img>
+        <td><img ${imgTag(e.image)}></img>
         </td>
       </tr>`;
   }, '');
