@@ -88,7 +88,7 @@ async function sendEntries(res, msg = '') {
 }
 
 // Routes
-app.post('/', upload.single('image'), async (req, res) => {
+app.post('*', upload.single('image'), async (req, res) => {
   let fileId;
   try {
     if (!req.file) {
