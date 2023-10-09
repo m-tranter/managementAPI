@@ -13,11 +13,9 @@ import { fileURLToPath } from 'url';
 import multer from 'multer';
 import fs from 'fs';
 import index from './index.js';
-import { delFile, createDates, sortDate, makeTable } from './helpers.js';
-
+import { delFile, createDates, s
 import ejs from 'ejs';
 import { NodejsClient } from 'contensis-management-api/lib/client/nodejs-client.js';
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Set some variables.
