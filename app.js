@@ -56,7 +56,6 @@ app.use(cors());
 app.use(myLogger);
 
 async function sendImage(file) {
-  console.log(file);
   client.entries
     .createAsset(
       {
@@ -74,7 +73,7 @@ async function sendImage(file) {
       return result;
     })
     .catch((error) => {
-      console.log(error);
+      console.log(`sendImage error: ${error}`);
       return error;
     });
 }
