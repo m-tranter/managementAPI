@@ -5,7 +5,7 @@ import fs from 'fs';
 function createDates(arr) {
   return arr.map((e) => {
     e.date = new Date(e.date);
-    e.dateString = e.date.toLocaleDateString();
+    e.dateString = e.date.toLocaleDateString('en-GB');
     return e;
   });
 }
