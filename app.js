@@ -2,7 +2,7 @@
 'use strict';
 
 // Modules.
-import {} from 'dotenv/config';
+//import {} from 'dotenv/config';
 import { v4 as uuidv4 } from 'uuid';
 import express from 'express';
 import path from 'path';
