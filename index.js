@@ -22,7 +22,7 @@ const index = `
           <h1 class="my-3">Leave a comment for the council</h1>
           <form
             enctype="multipart/form-data"
-            action="/"
+            action="/comments/leavecomment"
             method="POST"
           >
             <textarea
