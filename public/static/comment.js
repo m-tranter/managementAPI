@@ -11,5 +11,5 @@ img_picker.addEventListener('change', function () {
   }
 });
 
+display.addEventListener('focus', () => (display.innerHTML = ''));
 
-display.addEventListener("focus", () => display.innerHTML = ''); 

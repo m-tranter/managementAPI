@@ -131,7 +131,7 @@ app.post('/', upload.single('image'), async (req, res) => {
 });
 
 // Make sure request for .js files are fetched.
-app.get(/.*\.(js|css|png)$/, (req, res) => {
+app.get(/.*\.(js|css|png|jpg|jpeg)$/, (req, res) => {
   res.sendFile(path.join(dir, req.url));
 });
 
