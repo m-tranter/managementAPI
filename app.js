@@ -36,6 +36,7 @@ const client = NodejsClient.create({
 });
 console.log(`id: ${process.env.clientId}`);
 console.log(`secret: ${process.env.sharedSecret}`);
+console.log(`project: ${process.env.projectId}`);
 // Start the server.
 const app = express();
 app.listen(port, () => {
