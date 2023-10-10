@@ -12,10 +12,8 @@ import { regEx } from './swears.js';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
 import fs from 'fs';
-import index from './index.js';
 import { delFile, createDates, sortDate, makeTable } from './helpers.js';
 
-import ejs from 'ejs';
 import { NodejsClient } from 'contensis-management-api/lib/client/nodejs-client.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -43,6 +41,7 @@ const app = express();
 app.listen(port, () => {
   console.log(`Server listening on port ${port}.`);
 });
+app.set('view engine', 'ejs');
 
 // Log all requests to the server
 const myLogger = function (req, _, next) {
@@ -55,6 +54,7 @@ app.use(express.json());
 app.use(cors());
 app.use(myLogger);
 
+// Using a global variable to make it easier to send messages to client.
 let display = '';
 
 async function sendImage(file) {
@@ -87,7 +87,7 @@ async function sendEntries(res) {
   );
   const data = await response.json();
   const table = makeTable(createDates(data.items).sort(sortDate));
-  res.send(ejs.render(index, { table, display }));
+  res.render('index', {table, display});
   display = '';
 }
 
@@ -100,7 +100,7 @@ app.post('/', upload.single('image'), async (req, res) => {
     return;
   }
   let date = new Date();
-  console.log(`New comment received: ${msg}\n${date.toLocaleString()}`);
+  console.log(`New comment received: ${msg}\n${date.toLocaleString("en-GB")}`);
   let newEntry = {
     comment: msg,
     date: date,
@@ -151,6 +151,6 @@ app.get(/.*\.(js|css|png|jpg|jpeg)$/, (req, res) => {
   res.sendFile(path.join(dir, req.url));
 });
 
-app.get('*', function (_, res) {
+app.use('*', function (_, res) {
   sendEntries(res);
 });
