@@ -36,6 +36,9 @@ const client = NodejsClient.create({
   rootUrl: ROOT_URL,
 });
 
+
+console.log(client.clientDetails);
+
 // Start the server.
 const app = express();
 app.listen(port, () => {
